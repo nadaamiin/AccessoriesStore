@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="AccessoriesStore.Api/AccessoriesStore.Api.csproj" />
+  <Project Path="AccessoriesStore.Domain/AccessoriesStore.Domain.csproj" />
+</Solution>
