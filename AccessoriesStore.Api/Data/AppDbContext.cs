@@ -1,9 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using AccessoriesStore.Domain.Entities;
 
 namespace AccessoriesStore.Api.Data;
 
-public class AppDbContext : DbContext
+public class AppDbContext : IdentityDbContext<AdminUser>
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
@@ -15,7 +17,7 @@ public class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        base.OnModelCreating(modelBuilder);
+        base.OnModelCreating(modelBuilder); // must call base for Identity tables
 
         modelBuilder.Entity<Order>()
             .HasIndex(o => o.OrderNumber)

@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using AccessoriesStore.Api.Data;
+﻿using AccessoriesStore.Api.Data;
 using AccessoriesStore.Api.DTOs;
 using AccessoriesStore.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace AccessoriesStore.Api.Controllers;
 
@@ -51,6 +52,7 @@ public class CategoriesController : ControllerBase
     }
 
     // POST: api/categories
+    [Authorize]
     [HttpPost]
     public async Task<ActionResult<CategoryDto>> CreateCategory(CreateCategoryDto dto)
     {
@@ -74,6 +76,7 @@ public class CategoriesController : ControllerBase
     }
 
     // PUT: api/categories/5
+    [Authorize]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateCategory(int id, UpdateCategoryDto dto)
     {
@@ -89,6 +92,7 @@ public class CategoriesController : ControllerBase
     }
 
     // DELETE: api/categories/5
+    [Authorize]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteCategory(int id)
     {

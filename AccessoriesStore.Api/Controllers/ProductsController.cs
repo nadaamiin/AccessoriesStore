@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using AccessoriesStore.Api.Data;
+﻿using AccessoriesStore.Api.Data;
 using AccessoriesStore.Api.DTOs;
 using AccessoriesStore.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace AccessoriesStore.Api.Controllers;
 
@@ -68,7 +69,34 @@ public class ProductsController : ControllerBase
         });
     }
 
+    // GET: api/products/all
+    // Admin-only
+    // GET: api/products/admin/all
+    [Authorize]
+    [HttpGet("admin/all")]
+    public async Task<ActionResult<IEnumerable<ProductDto>>> GetAllProductsForAdmin()
+    {
+        var products = await _context.Products
+            .Include(p => p.Category)
+            .Select(p => new ProductDto
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Description = p.Description,
+                Price = p.Price,
+                StockQuantity = p.StockQuantity,
+                ImageUrl = p.ImageUrl,
+                IsActive = p.IsActive,
+                CategoryId = p.CategoryId,
+                CategoryName = p.Category.Name
+            })
+            .ToListAsync();
+
+        return Ok(products);
+    }
+
     // POST: api/products
+    [Authorize]
     [HttpPost]
     public async Task<ActionResult<ProductDto>> CreateProduct(CreateProductDto dto)
     {
@@ -103,6 +131,7 @@ public class ProductsController : ControllerBase
     }
 
     // PUT: api/products/5
+    [Authorize]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateProduct(int id, UpdateProductDto dto)
     {
@@ -126,6 +155,7 @@ public class ProductsController : ControllerBase
     }
 
     // DELETE: api/products/5
+    [Authorize]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteProduct(int id)
     {
@@ -139,6 +169,7 @@ public class ProductsController : ControllerBase
     }
 
     // POST: api/products/5/image
+    [Authorize]
     [HttpPost("{id}/image")]
     public async Task<IActionResult> UploadImage(int id, IFormFile file)
     {
