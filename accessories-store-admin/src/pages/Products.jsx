@@ -21,21 +21,21 @@ function Products() {
   const [query, setQuery] = useState("");
   const [deleteTarget, setDeleteTarget] = useState(null);
 
- const loadData = async () => {
-  setLoading(true);
-  try {
-    const [productsRes, categoriesRes] = await Promise.all([
-      getAllProductsAdmin(),
-      getCategories(),
-    ]);
-    setProducts(productsRes.data);
-    setCategories(categoriesRes.data);
-  } catch (err) {
-    console.error("Failed to load data:", err);
-  } finally {
-    setLoading(false);
-  }
-};
+  const loadData = async () => {
+    setLoading(true);
+    try {
+      const [productsRes, categoriesRes] = await Promise.all([
+        getAllProductsAdmin(),
+        getCategories(),
+      ]);
+      setProducts(productsRes.data);
+      setCategories(categoriesRes.data);
+    } catch (err) {
+      console.error("Failed to load data:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     loadData();
@@ -52,18 +52,18 @@ function Products() {
   };
 
   const handleDeleteClick = (product) => {
-  setDeleteTarget(product);
-};
+    setDeleteTarget(product);
+  };
 
-const confirmDelete = async () => {
-  try {
-    await deleteProduct(deleteTarget.id);
-    setDeleteTarget(null);
-    loadData();
-  } catch (err) {
-    alert("Failed to delete product.");
-  }
-};
+  const confirmDelete = async () => {
+    try {
+      await deleteProduct(deleteTarget.id);
+      setDeleteTarget(null);
+      loadData();
+    } catch (err) {
+      alert("Failed to delete product.");
+    }
+  };
 
   const handleSave = async (formData, imageFile) => {
     try {
@@ -110,7 +110,50 @@ const confirmDelete = async () => {
         </button>
       </div>
 
-      <div className="bg-white border border-nude-200 rounded-lg overflow-x-auto">
+      {/* Mobile: card list */}
+      <div className="md:hidden space-y-3">
+        {filteredProducts.map((p) => (
+          <div key={p.id} className="bg-white border border-nude-200 rounded-lg p-4 flex gap-3">
+            {p.imageUrl ? (
+              <img
+                src={`https://localhost:7113${p.imageUrl}`}
+                alt={p.name}
+                className="w-16 h-16 object-cover rounded-md border border-nude-200 shrink-0"
+              />
+            ) : (
+              <div className="w-16 h-16 bg-nude-100 rounded-md flex items-center justify-center text-muted text-xs shrink-0">
+                —
+              </div>
+            )}
+            <div className="flex-1 min-w-0">
+              <div className="flex items-start justify-between gap-2">
+                <p className="text-espresso font-medium truncate">{p.name}</p>
+                <span className={`shrink-0 px-2 py-0.5 rounded-full text-[10px] font-medium ${p.isActive ? "bg-sage/15 text-sage" : "bg-nude-100 text-muted"}`}>
+                  {p.isActive ? "Active" : "Inactive"}
+                </span>
+              </div>
+              <p className="text-xs text-muted mt-0.5">{p.categoryName}</p>
+              <p className="text-sm text-espresso mt-2">EGP {p.price.toFixed(2)} · Stock: {p.stockQuantity}</p>
+              <div className="flex gap-3 mt-2">
+                <button onClick={() => handleEditClick(p)} className="text-nude-500 hover:text-espresso text-sm font-medium transition">
+                  Edit
+                </button>
+                <button onClick={() => handleDeleteClick(p)} className="text-brick/80 hover:text-brick text-sm font-medium transition">
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
+        {filteredProducts.length === 0 && (
+          <div className="bg-white border border-nude-200 rounded-lg p-8 text-center text-muted">
+            {products.length === 0 ? "No products yet — add your first piece to the catalog." : "No products match your search."}
+          </div>
+        )}
+      </div>
+
+      {/* Desktop: table */}
+      <div className="hidden md:block bg-white border border-nude-200 rounded-lg overflow-x-auto">
         <table className="w-full text-left min-w-[720px]">
           <thead>
             <tr className="border-b border-nude-200">

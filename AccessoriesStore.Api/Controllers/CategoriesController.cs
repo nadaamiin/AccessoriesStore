@@ -100,6 +100,10 @@ public class CategoriesController : ControllerBase
         if (category == null)
             return NotFound();
 
+        var hasProducts = await _context.Products.AnyAsync(p => p.CategoryId == id);
+        if (hasProducts)
+            return BadRequest("Cannot delete this category — it still has products assigned to it. Move or delete those products first.");
+
         _context.Categories.Remove(category);
         await _context.SaveChangesAsync();
         return NoContent();

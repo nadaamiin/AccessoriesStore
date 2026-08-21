@@ -57,7 +57,7 @@ function Dashboard() {
         <p className="text-xs tracking-[0.3em] uppercase text-muted mb-1">Overview</p>
         <h1 className="font-display text-3xl text-espresso mb-8">Welcome back</h1>
 
-        <div className="grid grid-cols-2 lg:grid-cols-6 gap-4 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4 mb-8">
           {cards.map((stat) => (
             <div key={stat.label} className="bg-white border border-nude-200 rounded-lg p-5">
               <p className="text-xs tracking-wide uppercase text-muted mb-2">{stat.label}</p>
@@ -69,7 +69,6 @@ function Dashboard() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Revenue trend */}
           <div className="lg:col-span-2 bg-white border border-nude-200 rounded-lg p-6">
             <h2 className="font-display text-lg text-espresso mb-1">Revenue, last 14 days</h2>
             <p className="text-xs text-muted mb-4">Excludes cancelled orders</p>
@@ -114,7 +113,6 @@ function Dashboard() {
             )}
           </div>
 
-          {/* Orders by status — donut chart */}
           <div className="bg-white border border-nude-200 rounded-lg p-6">
             <h2 className="font-display text-lg text-espresso mb-1">Orders by status</h2>
             <p className="text-xs text-muted mb-4">All-time breakdown</p>
