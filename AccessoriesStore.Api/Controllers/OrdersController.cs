@@ -120,7 +120,12 @@ public class OrdersController : ControllerBase
             .Include(o => o.OrderItems)
                 .ThenInclude(oi => oi.Product)
                     .ThenInclude(p => p.Category)
+            .Include(o => o.StatusHistory)
             .FirstAsync(o => o.Id == orderId);
+
+        var latestChange = order.StatusHistory
+            .OrderByDescending(h => h.ChangedAt)
+            .FirstOrDefault();
 
         return new OrderDto
         {
@@ -131,6 +136,7 @@ public class OrdersController : ControllerBase
             CustomerPhone = order.CustomerPhone,
             ShippingAddress = order.ShippingAddress,
             Status = order.Status.ToString(),
+            StatusChangedAt = latestChange?.ChangedAt ?? order.CreatedAt,
             TotalAmount = order.TotalAmount,
             CreatedAt = order.CreatedAt,
             Items = order.OrderItems.Select(oi => new OrderItemDto
@@ -179,7 +185,8 @@ public class OrdersController : ControllerBase
             return NotFound();
 
         order.Status = dto.Status;
-        order.StatusHistory.Add(new OrderStatusHistory
+
+        _context.OrderStatusHistories.Add(new OrderStatusHistory
         {
             OrderId = order.Id,
             Status = dto.Status,

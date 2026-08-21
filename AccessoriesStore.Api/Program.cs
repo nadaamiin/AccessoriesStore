@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using AccessoriesStore.Domain.Entities;
 using Microsoft.OpenApi;
+using System.Text.Json.Serialization;
 
 namespace AccessoriesStore.Api
 {
@@ -16,7 +17,11 @@ namespace AccessoriesStore.Api
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                });
 
             // Swagger/OpenAPI
             builder.Services.AddEndpointsApiExplorer();

@@ -36,11 +36,11 @@ public class OrderDto
     public string CustomerPhone { get; set; } = string.Empty;
     public string ShippingAddress { get; set; } = string.Empty;
     public string Status { get; set; } = string.Empty;
+    public DateTime StatusChangedAt { get; set; }
     public decimal TotalAmount { get; set; }
     public DateTime CreatedAt { get; set; }
     public List<OrderItemDto> Items { get; set; } = new();
 }
-
 public class UpdateOrderStatusDto
 {
     public OrderStatus Status { get; set; }
