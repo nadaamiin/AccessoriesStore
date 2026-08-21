@@ -104,12 +104,12 @@ function Orders() {
                   <span className="text-espresso">
                     {item.productName} <span className="text-muted">· {item.categoryName}</span> × {item.quantity}
                   </span>
-                  <span className="text-muted">${(item.unitPrice * item.quantity).toFixed(2)}</span>
+                  <span className="text-muted">EGP {(item.unitPrice * item.quantity).toFixed(2)}</span>
                 </div>
               ))}
               <div className="flex justify-between text-sm font-medium pt-2 border-t border-nude-100 mt-2">
                 <span className="text-espresso">Total</span>
-                <span className="text-espresso">${order.totalAmount.toFixed(2)}</span>
+                <span className="text-espresso">EGP {order.totalAmount.toFixed(2)}</span>
               </div>
             </div>
           </div>

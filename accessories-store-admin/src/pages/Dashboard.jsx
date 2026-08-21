@@ -41,7 +41,7 @@ function Dashboard() {
     { label: "Active Products", value: stats.activeProducts },
     { label: "Total Orders", value: stats.totalOrders },
     { label: "Pending Orders", value: stats.pendingOrders },
-    { label: "Total Revenue", value: `$${stats.totalRevenue.toFixed(2)}` },
+    { label: "Total Revenue", value: `EGP ${stats.totalRevenue.toFixed(2)}` },
     { label: "Low Stock (≤5)", value: stats.lowStockCount, warn: stats.lowStockCount > 0 },
   ];
 
@@ -95,11 +95,11 @@ function Dashboard() {
                     axisLine={false}
                     tickLine={false}
                     width={55}
-                    tickFormatter={(v) => `$${v}`}
+                    tickFormatter={(v) => `${v}`}
                   />
                   <Tooltip
                     contentStyle={{ background: "#fff", border: "1px solid #E5D8CE", borderRadius: 8, fontSize: 12 }}
-                    formatter={(value) => [`$${Number(value).toFixed(2)}`, "Revenue"]}
+                    formatter={(value) => [`EGP ${Number(value).toFixed(2)}`, "Revenue"]}
                   />
                   <Line
                     type="monotone"

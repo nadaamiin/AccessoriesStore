@@ -104,7 +104,7 @@ const confirmDelete = async () => {
         </div>
         <button
           onClick={handleAddClick}
-          className="bg-espresso text-nude-50 px-5 py-2.5 rounded-md text-sm font-medium hover:bg-nude-600 transition self-start sm:self-auto"
+          className="bg-[#8e625a] text-nude-50 px-5 py-2.5 rounded-md text-sm font-medium hover:bg-nude-600 transition self-start sm:self-auto"
         >
           + Add Product
         </button>
@@ -141,7 +141,7 @@ const confirmDelete = async () => {
                 </td>
                 <td className="px-5 py-3 text-espresso font-medium">{p.name}</td>
                 <td className="px-5 py-3 text-muted">{p.categoryName}</td>
-                <td className="px-5 py-3 text-espresso">${p.price.toFixed(2)}</td>
+                <td className="px-5 py-3 text-espresso">EGP {p.price.toFixed(2)}</td>
                 <td className="px-5 py-3 text-espresso">{p.stockQuantity}</td>
                 <td className="px-5 py-3">
                   <span
