@@ -54,11 +54,17 @@ function ProductCard({ product }) {
           <div className="w-full h-full flex items-center justify-center text-muted text-sm">No image</div>
         )}
 
-        {/* Sale ribbon */}
-        {product.isOnSale && product.salePrice && (
-          <span className="absolute top-3 left-3 bg-rose-500 text-white text-[10px] font-semibold px-2.5 py-1 rounded-full">
-            Sale
+        {/* Sale / Out of Stock ribbon — same slot, out of stock takes priority */}
+        {product.stockQuantity === 0 ? (
+          <span className="absolute top-3 left-3 bg-espresso text-white text-[10px] font-semibold px-2.5 py-1 rounded-full">
+            Out of Stock
           </span>
+        ) : (
+          product.isOnSale && product.salePrice && (
+            <span className="absolute top-3 left-3 bg-rose-500 text-white text-[10px] font-semibold px-2.5 py-1 rounded-full">
+              Sale
+            </span>
+          )
         )}
 
         {/* Dot indicators — only shown when there's more than one image */}
@@ -85,6 +91,7 @@ function ProductCard({ product }) {
           </svg>
         </button>
 
+        {product.stockQuantity > 0 && (
         <button
           onClick={handleAdd}
           className="absolute bottom-3 right-3 w-9 h-9 rounded-full bg-white shadow-md flex items-center justify-center hover:bg-espresso hover:text-white transition"
@@ -95,6 +102,7 @@ function ProductCard({ product }) {
             <path d="M3 6h18M16 10a4 4 0 0 1-8 0" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </button>
+      )}
       </div>
 
       <div className="pt-3 text-center">

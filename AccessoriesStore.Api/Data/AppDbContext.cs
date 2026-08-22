@@ -17,6 +17,7 @@ public class AppDbContext : IdentityDbContext<AdminUser>
     public DbSet<ProductImage> ProductImages => Set<ProductImage>();
 
     public DbSet<Announcement> Announcements => Set<Announcement>();
+    public DbSet<Review> Reviews => Set<Review>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

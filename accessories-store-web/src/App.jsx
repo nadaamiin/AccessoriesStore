@@ -1,7 +1,9 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { CartProvider } from "./context/CartContext";
+import ScrollToTop from "./components/ScrollToTop";
 import Home from "./pages/Home";
 import Products from "./pages/Products";
+import ProductDetail from "./pages/ProductDetail";
 
 function Placeholder({ title }) {
   return (
@@ -16,10 +18,11 @@ function App() {
   return (
     <CartProvider>
       <BrowserRouter>
+        <ScrollToTop />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/products" element={<Products />} />
-          <Route path="/products/:id" element={<Placeholder title="Product Detail" />} />
+          <Route path="/products/:id" element={<ProductDetail />} />
           <Route path="/cart" element={<Placeholder title="Cart" />} />
           <Route path="/favorites" element={<Placeholder title="Wishlist" />} />
           <Route path="/about" element={<Placeholder title="About" />} />

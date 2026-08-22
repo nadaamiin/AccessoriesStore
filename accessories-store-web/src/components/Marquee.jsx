@@ -1,11 +1,15 @@
 const phrases = [
   "Handmade with Love",
+  "Fast & Easy Ordering",
   "Unique, One-of-a-Kind Pieces",
   "Crafted With Care in Egypt",
 ];
 
 function Marquee() {
-  const items = [...phrases, ...phrases]; // duplicated for seamless loop
+  // Repeat the set several times so the track is always wider than the viewport,
+  // then duplicate that whole block once for a seamless -50% loop.
+  const block = Array(4).fill(phrases).flat();
+  const items = [...block, ...block];
 
   return (
     <div className="bg-nudepink-300/40 py-4 overflow-hidden border-y border-blush-200/60">
