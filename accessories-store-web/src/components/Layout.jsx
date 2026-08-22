@@ -1,6 +1,8 @@
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import AnnouncementBanner from "./AnnouncementBanner";
+import CartDrawer from "./CartDrawer";
+import FavoritesDrawer from "./FavoritesDrawer";
 
 function Layout({ children }) {
   return (
@@ -9,6 +11,8 @@ function Layout({ children }) {
       <Navbar />
       <main className="flex-1">{children}</main>
       <Footer />
+      <CartDrawer />
+      <FavoritesDrawer />
     </div>
   );
 }

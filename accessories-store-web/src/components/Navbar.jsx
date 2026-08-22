@@ -3,6 +3,7 @@ import { Link, NavLink } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import MobileSidebar from "./MobileSidebar";
 import logo from "../assets/logo.png";
+import { useUI } from "../context/UIContext";
 
 const navLinks = [
   { to: "/", label: "Home" },
@@ -14,6 +15,7 @@ const navLinks = [
 function Navbar() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { totalCount } = useCart();
+  const { openCart, openFavorites } = useUI();
 
   return (
     <>
@@ -55,12 +57,12 @@ function Navbar() {
           </nav>
 
           <div className="ml-auto flex items-center gap-1">
-            <Link to="/favorites" className="p-2.5 rounded-full hover:bg-blush-100 text-espresso" aria-label="Wishlist">
+            <button onClick={openFavorites} className="p-2.5 rounded-full hover:bg-blush-100 text-espresso" aria-label="Wishlist">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z" strokeLinejoin="round" />
               </svg>
-            </Link>
-            <Link to="/cart" className="relative p-2.5 rounded-full hover:bg-blush-100 text-espresso" aria-label="Cart">
+            </button>
+            <button onClick={openCart} className="relative p-2.5 rounded-full hover:bg-blush-100 text-espresso" aria-label="Cart">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" />
                 <path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6" strokeLinecap="round" strokeLinejoin="round" />
@@ -70,7 +72,7 @@ function Navbar() {
                   {totalCount}
                 </span>
               )}
-            </Link>
+            </button>
           </div>
         </div>
       </header>

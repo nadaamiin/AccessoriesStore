@@ -1,5 +1,7 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { CartProvider } from "./context/CartContext";
+import { FavoritesProvider } from "./context/FavoritesContext";
+import { UIProvider } from "./context/UIContext";
 import ScrollToTop from "./components/ScrollToTop";
 import Home from "./pages/Home";
 import Products from "./pages/Products";
@@ -17,19 +19,24 @@ function Placeholder({ title }) {
 function App() {
   return (
     <CartProvider>
-      <BrowserRouter>
-        <ScrollToTop />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/products" element={<Products />} />
-          <Route path="/products/:id" element={<ProductDetail />} />
-          <Route path="/cart" element={<Placeholder title="Cart" />} />
-          <Route path="/favorites" element={<Placeholder title="Wishlist" />} />
-          <Route path="/about" element={<Placeholder title="About" />} />
-          <Route path="/contact" element={<Placeholder title="Contact" />} />
-          <Route path="/track-order" element={<Placeholder title="Track Order" />} />
-        </Routes>
-      </BrowserRouter>
+      <FavoritesProvider>
+        <UIProvider>
+          <BrowserRouter>
+            <ScrollToTop />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/products" element={<Products />} />
+              <Route path="/products/:id" element={<ProductDetail />} />
+              <Route path="/checkout" element={<Placeholder title="Checkout" />} />
+              <Route path="/about" element={<Placeholder title="About" />} />
+              <Route path="/contact" element={<Placeholder title="Contact" />} />
+              <Route path="/track-order" element={<Placeholder title="Track Order" />} />
+              <Route path="/cart" element={<Navigate to="/" replace />} />
+              <Route path="/favorites" element={<Navigate to="/" replace />} />
+            </Routes>
+          </BrowserRouter>
+        </UIProvider>
+      </FavoritesProvider>
     </CartProvider>
   );
 }

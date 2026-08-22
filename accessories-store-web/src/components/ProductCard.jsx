@@ -1,13 +1,17 @@
 import { Link } from "react-router-dom";
 import { useState, useRef } from "react";
-import { isFavorite, toggleFavorite } from "../utils/favorites";
+import { useFavorites } from "../context/FavoritesContext";
 import { useCart } from "../context/CartContext";
+import { useUI } from "../context/UIContext";
 
 function ProductCard({ product }) {
-  const [fav, setFav] = useState(isFavorite(product.id));
+  const { isFavorite, toggleFavorite } = useFavorites();
   const [activeIndex, setActiveIndex] = useState(0);
   const { addItem } = useCart();
   const intervalRef = useRef(null);
+  const { openCart } = useUI();
+
+  const fav = isFavorite(product.id);
 
   const images = [
     ...(product.imageUrl ? [product.imageUrl] : []),
@@ -16,13 +20,14 @@ function ProductCard({ product }) {
 
   const handleFav = (e) => {
     e.preventDefault();
-    setFav(toggleFavorite(product.id).includes(product.id));
+    toggleFavorite(product);
   };
 
   const handleAdd = (e) => {
-    e.preventDefault();
-    if (product.stockQuantity === 0) return;
-    addItem(product, 1);
+  e.preventDefault();
+  if (product.stockQuantity === 0) return;
+  addItem(product, 1);
+  openCart();
   };
 
   const startCycle = () => {

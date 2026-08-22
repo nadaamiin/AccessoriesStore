@@ -2,11 +2,13 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { getCategories } from "../api/categories";
 import logo from "../assets/logo.png";
+import { useUI } from "../context/UIContext";
 
 function MobileSidebar({ open, onClose }) {
   const [categories, setCategories] = useState([]);
   const [categoriesOpen, setCategoriesOpen] = useState(false);
   const navigate = useNavigate();
+  const { openFavorites, openCart } = useUI();
 
   useEffect(() => {
     getCategories().then((res) => setCategories(res.data)).catch(() => {});
@@ -81,10 +83,10 @@ function MobileSidebar({ open, onClose }) {
           <button onClick={() => go("/contact")} className="text-left px-4 py-3 rounded-xl text-espresso font-medium hover:bg-blush-100 transition">
             Contact
           </button>
-          <button onClick={() => go("/favorites")} className="text-left px-4 py-3 rounded-xl text-espresso font-medium hover:bg-blush-100 transition">
+          <button onClick={() => { openFavorites(); onClose(); }} className="text-left px-4 py-3 rounded-xl text-espresso font-medium hover:bg-blush-100 transition">
             Wishlist
           </button>
-          <button onClick={() => go("/cart")} className="text-left px-4 py-3 rounded-xl text-espresso font-medium hover:bg-blush-100 transition">
+          <button onClick={() => { openCart(); onClose(); }} className="text-left px-4 py-3 rounded-xl text-espresso font-medium hover:bg-blush-100 transition">
             Cart
           </button>
         </nav>

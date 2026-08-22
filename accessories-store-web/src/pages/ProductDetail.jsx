@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { getProduct, getProducts } from "../api/products";
-import { isFavorite, toggleFavorite } from "../utils/favorites";
+import { useFavorites } from "../context/FavoritesContext";
 import { useCart } from "../context/CartContext";
 import Layout from "../components/Layout";
 import ProductCard from "../components/ProductCard";
 import Accordion from "../components/Accordion";
 import ReviewForm from "../components/ReviewForm";
 import ReviewsSection from "../components/ReviewsSection";
+import { useUI } from "../context/UIContext";
 
 function ProductDetail() {
   const { id } = useParams();
@@ -15,10 +16,11 @@ function ProductDetail() {
   const [related, setRelated] = useState([]);
   const [activeImage, setActiveImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
-  const [fav, setFav] = useState(false);
+  const { isFavorite, toggleFavorite } = useFavorites();
   const [showReviewForm, setShowReviewForm] = useState(false);
   const [loading, setLoading] = useState(true);
   const { addItem } = useCart();
+  const { openCart } = useUI();
 
   useEffect(() => {
     setLoading(true);
@@ -29,7 +31,6 @@ function ProductDetail() {
     getProduct(id)
       .then((res) => {
         setProduct(res.data);
-        setFav(isFavorite(res.data.id));
         return getProducts();
       })
       .then((res) => {
@@ -61,12 +62,13 @@ function ProductDetail() {
   ].filter((url, index, arr) => arr.indexOf(url) === index);
 
   const handleFav = () => {
-    setFav(toggleFavorite(product.id).includes(product.id));
+    toggleFavorite(product);
   };
 
   const handleAdd = () => {
-    if (product.stockQuantity === 0) return;
-    addItem(product, quantity);
+  if (product.stockQuantity === 0) return;
+  addItem(product, quantity);
+  openCart();
   };
 
   return (
@@ -161,8 +163,7 @@ function ProductDetail() {
               className="w-12 h-12 rounded-full border border-nudepink-200 flex items-center justify-center hover:bg-blush-100 transition shrink-0"
               aria-label="Toggle favorite"
             >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill={fav ? "#A9855C" : "none"} stroke={fav ? "#A9855C" : "#7A6A5C"} strokeWidth="2">
-                <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z" strokeLinejoin="round" />
+            <svg width="18" height="18" viewBox="0 0 24 24" fill={isFavorite(product.id) ? "#A9855C" : "none"} stroke={isFavorite(product.id) ? "#A9855C" : "#7A6A5C"} strokeWidth="2">                <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z" strokeLinejoin="round" />
               </svg>
             </button>
           </div>
