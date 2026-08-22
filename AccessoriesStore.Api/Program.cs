@@ -84,9 +84,9 @@ namespace AccessoriesStore.Api
 
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy("AllowAdminApp", policy =>
+                options.AddPolicy("AllowFrontend", policy =>
                 {
-                    policy.WithOrigins("http://localhost:5173")
+                    policy.WithOrigins("http://localhost:5173", "http://localhost:5174")
                           .AllowAnyHeader()
                           .AllowAnyMethod();
                 });
@@ -102,7 +102,7 @@ namespace AccessoriesStore.Api
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseCors("AllowAdminApp");
+            app.UseCors("AllowFrontend");
             app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers();

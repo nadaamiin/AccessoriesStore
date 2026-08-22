@@ -7,6 +7,7 @@ const navItems = [
   { to: "/products", label: "Products" },
   { to: "/categories", label: "Categories" },
   { to: "/orders", label: "Orders" },
+  { to: "/announcement", label: "Announcement" },
 ];
 
 function AppShell({ children, search }) {

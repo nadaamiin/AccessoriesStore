@@ -10,6 +10,8 @@ namespace AccessoriesStore.Domain.Entities
         public string Name { get; set; } = string.Empty;
         public string? Description { get; set; }
         public decimal Price { get; set; }
+        public decimal? SalePrice { get; set; }
+        public bool IsOnSale { get; set; } = false;
         public int StockQuantity { get; set; }
         public string? ImageUrl { get; set; }
         public bool IsActive { get; set; } = true;
@@ -19,5 +21,6 @@ namespace AccessoriesStore.Domain.Entities
         public Category Category { get; set; } = null!;
 
         public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+        public ICollection<ProductImage> Images { get; set; } = new List<ProductImage>();
     }
 }

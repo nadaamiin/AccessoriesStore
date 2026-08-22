@@ -2,28 +2,44 @@ import { useState, useEffect } from "react";
 
 function ProductModal({ product, categories, onClose, onSave }) {
   const [form, setForm] = useState({
-    name: "",
-    description: "",
-    price: "",
-    stockQuantity: "",
-    categoryId: "",
-    isActive: true,
+  name: "",
+  description: "",
+  price: "",
+  stockQuantity: "",
+  categoryId: "",
+  isActive: true,
+  isOnSale: false,
+  salePrice: "",
   });
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
 
+  // Gallery state
+  const [existingImages, setExistingImages] = useState([]); // [{id, url}]
+  const [removedImageIds, setRemovedImageIds] = useState([]);
+  const [newGalleryFiles, setNewGalleryFiles] = useState([]); // File[]
+  const [newGalleryPreviews, setNewGalleryPreviews] = useState([]); // string[]
+
   useEffect(() => {
     if (product) {
       setForm({
-        name: product.name,
-        description: product.description || "",
-        price: product.price,
-        stockQuantity: product.stockQuantity,
-        categoryId: product.categoryId,
-        isActive: product.isActive,
-      });
+      name: product.name,
+      description: product.description || "",
+      price: product.price,
+      stockQuantity: product.stockQuantity,
+      categoryId: product.categoryId,
+      isActive: product.isActive,
+      isOnSale: product.isOnSale || false,
+      salePrice: product.salePrice || "",
+    });
       if (product.imageUrl) {
         setImagePreview(`https://localhost:7113${product.imageUrl}`);
+      }
+      // product.imageUrls is a list of plain URL strings from the API —
+      // we don't have per-image ids from that shape, so this modal expects
+      // product.images (id + url) if available; fall back gracefully otherwise.
+      if (product.images) {
+        setExistingImages(product.images);
       }
     }
   }, [product]);
@@ -41,17 +57,38 @@ function ProductModal({ product, categories, onClose, onSave }) {
     }
   };
 
+  const handleGalleryFilesChange = (e) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
+    setNewGalleryFiles((prev) => [...prev, ...files]);
+    setNewGalleryPreviews((prev) => [...prev, ...files.map((f) => URL.createObjectURL(f))]);
+    e.target.value = ""; // allow re-selecting the same file again if needed
+  };
+
+  const removeExistingImage = (imageId) => {
+    setRemovedImageIds((prev) => [...prev, imageId]);
+    setExistingImages((prev) => prev.filter((img) => img.id !== imageId));
+  };
+
+  const removeNewGalleryFile = (index) => {
+    setNewGalleryFiles((prev) => prev.filter((_, i) => i !== index));
+    setNewGalleryPreviews((prev) => prev.filter((_, i) => i !== index));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     onSave(
-      {
-        ...form,
-        price: parseFloat(form.price),
-        stockQuantity: parseInt(form.stockQuantity, 10),
-        categoryId: parseInt(form.categoryId, 10),
-      },
-      imageFile
-    );
+    {
+      ...form,
+      price: parseFloat(form.price),
+      stockQuantity: parseInt(form.stockQuantity, 10),
+      categoryId: parseInt(form.categoryId, 10),
+      salePrice: form.isOnSale && form.salePrice ? parseFloat(form.salePrice) : null,
+    },
+    imageFile,
+    newGalleryFiles,
+    removedImageIds
+  );
   };
 
   const inputClass =
@@ -67,14 +104,10 @@ function ProductModal({ product, categories, onClose, onSave }) {
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className={labelClass}>Product Image</label>
+            <label className={labelClass}>Primary Image</label>
             <div className="flex items-center gap-4">
               {imagePreview ? (
-                <img
-                  src={imagePreview}
-                  alt="Preview"
-                  className="w-20 h-20 object-cover rounded-md border border-nude-200"
-                />
+                <img src={imagePreview} alt="Preview" className="w-20 h-20 object-cover rounded-md border border-nude-200" />
               ) : (
                 <div className="w-20 h-20 rounded-md border border-dashed border-nude-300 flex items-center justify-center text-muted text-xs bg-white">
                   No image
@@ -83,6 +116,57 @@ function ProductModal({ product, categories, onClose, onSave }) {
               <input type="file" accept="image/*" onChange={handleImageChange} className="text-sm text-muted" />
             </div>
           </div>
+
+          {/* Additional photos gallery — only relevant once the product exists */}
+          {product && (
+            <div>
+              <label className={labelClass}>Additional Photos</label>
+              <div className="flex flex-wrap gap-3">
+                {existingImages.map((img) => (
+                  <div key={img.id} className="relative w-16 h-16">
+                    <img
+                      src={`https://localhost:7113${img.url}`}
+                      alt=""
+                      className="w-16 h-16 object-cover rounded-md border border-nude-200"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removeExistingImage(img.id)}
+                      className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-brick text-white text-xs flex items-center justify-center"
+                      aria-label="Remove image"
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
+
+                {newGalleryPreviews.map((src, i) => (
+                  <div key={i} className="relative w-16 h-16">
+                    <img src={src} alt="" className="w-16 h-16 object-cover rounded-md border border-nude-300" />
+                    <button
+                      type="button"
+                      onClick={() => removeNewGalleryFile(i)}
+                      className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-brick text-white text-xs flex items-center justify-center"
+                      aria-label="Remove image"
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
+
+                <label className="w-16 h-16 rounded-md border border-dashed border-nude-300 flex items-center justify-center text-muted text-xs bg-white cursor-pointer hover:bg-nude-100 transition">
+                  + Add
+                  <input type="file" accept="image/*" multiple onChange={handleGalleryFilesChange} className="hidden" />
+                </label>
+              </div>
+            </div>
+          )}
+
+          {!product && (
+            <p className="text-xs text-muted">
+              Save this product first to add additional photos.
+            </p>
+          )}
 
           <div>
             <label className={labelClass}>Name</label>
@@ -105,6 +189,34 @@ function ProductModal({ product, categories, onClose, onSave }) {
             </div>
           </div>
 
+          {/* ----------------------- */}
+          <div className="bg-nude-100 rounded-md p-4 space-y-3">
+            <label className="flex items-center gap-2 text-sm text-espresso font-medium">
+              <input
+                type="checkbox"
+                checked={form.isOnSale}
+                onChange={(e) => setForm((prev) => ({ ...prev, isOnSale: e.target.checked }))}
+              />
+              On Sale
+            </label>
+            {form.isOnSale && (
+              <div>
+                <label className={labelClass}>Sale Price</label>
+                <input
+                  type="number"
+                  step="0.01"
+                  value={form.salePrice}
+                  onChange={(e) => setForm((prev) => ({ ...prev, salePrice: e.target.value }))}
+                  placeholder="Discounted price"
+                  required={form.isOnSale}
+                  className={inputClass}
+                />
+              </div>
+            )}
+          </div>
+          {/* ----------------------- */}
+
+
           <div>
             <label className={labelClass}>Category</label>
             <select name="categoryId" value={form.categoryId} onChange={handleChange} required className={inputClass}>
@@ -126,7 +238,7 @@ function ProductModal({ product, categories, onClose, onSave }) {
             <button type="button" onClick={onClose} className="px-4 py-2.5 rounded-md border border-nude-200 text-espresso hover:bg-nude-100 transition text-sm font-medium">
               Cancel
             </button>
-            <button type="submit" className="px-4 py-2.5 rounded-md bg-espresso text-nude-50 hover:bg-nude-600 transition text-sm font-medium">
+            <button type="submit" className="px-4 py-2.5 rounded-md bg-[#8e625a] text-nude-50 hover:bg-nude-600 transition text-sm font-medium">
               Save
             </button>
           </div>

@@ -14,6 +14,9 @@ public class AppDbContext : IdentityDbContext<AdminUser>
     public DbSet<Order> Orders => Set<Order>();
     public DbSet<OrderItem> OrderItems => Set<OrderItem>();
     public DbSet<OrderStatusHistory> OrderStatusHistories => Set<OrderStatusHistory>();
+    public DbSet<ProductImage> ProductImages => Set<ProductImage>();
+
+    public DbSet<Announcement> Announcements => Set<Announcement>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -25,6 +28,14 @@ public class AppDbContext : IdentityDbContext<AdminUser>
 
         modelBuilder.Entity<Product>()
             .Property(p => p.Price)
+            .HasColumnType("decimal(18,2)");
+
+        modelBuilder.Entity<Product>()
+            .Property(p => p.Price)
+            .HasColumnType("decimal(18,2)");
+
+        modelBuilder.Entity<Product>()
+            .Property(p => p.SalePrice)
             .HasColumnType("decimal(18,2)");
 
         modelBuilder.Entity<OrderItem>()

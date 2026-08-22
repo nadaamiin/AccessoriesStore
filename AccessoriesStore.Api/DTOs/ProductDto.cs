@@ -1,5 +1,11 @@
 ﻿namespace AccessoriesStore.Api.DTOs;
 
+public class ProductImageDto
+{
+    public int Id { get; set; }
+    public string Url { get; set; } = string.Empty;
+}
+
 public class ProductDto
 {
     public int Id { get; set; }
@@ -8,11 +14,14 @@ public class ProductDto
     public decimal Price { get; set; }
     public int StockQuantity { get; set; }
     public string? ImageUrl { get; set; }
+    public List<string> ImageUrls { get; set; } = new();
+    public List<ProductImageDto> Images { get; set; } = new();
     public bool IsActive { get; set; }
     public int CategoryId { get; set; }
     public string CategoryName { get; set; } = string.Empty;
+    public decimal? SalePrice { get; set; }
+    public bool IsOnSale { get; set; }
 }
-
 public class CreateProductDto
 {
     public string Name { get; set; } = string.Empty;
@@ -30,4 +39,6 @@ public class UpdateProductDto
     public int StockQuantity { get; set; }
     public bool IsActive { get; set; }
     public int CategoryId { get; set; }
+    public decimal? SalePrice { get; set; }
+    public bool IsOnSale { get; set; }
 }

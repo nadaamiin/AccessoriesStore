@@ -13,3 +13,11 @@ export const uploadProductImage = (id, file) => {
     headers: { "Content-Type": "multipart/form-data" },
   });
 };
+export const uploadProductImages = (id, files) => {
+  const formData = new FormData();
+  files.forEach((file) => formData.append("files", file));
+  return apiClient.post(`/products/${id}/images`, formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+};
+export const deleteProductImage = (imageId) => apiClient.delete(`/products/images/${imageId}`);

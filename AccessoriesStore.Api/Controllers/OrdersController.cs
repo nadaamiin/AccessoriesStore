@@ -63,16 +63,17 @@ public class OrdersController : ControllerBase
         foreach (var item in dto.Items)
         {
             var product = products.First(p => p.Id == item.ProductId);
+            var effectivePrice = (product.IsOnSale && product.SalePrice.HasValue) ? product.SalePrice.Value : product.Price;
 
             order.OrderItems.Add(new OrderItem
             {
                 ProductId = product.Id,
                 Quantity = item.Quantity,
-                UnitPrice = product.Price
+                UnitPrice = effectivePrice
             });
 
             product.StockQuantity -= item.Quantity;
-            total += product.Price * item.Quantity;
+            total += effectivePrice * item.Quantity;
         }
 
         order.TotalAmount = total;

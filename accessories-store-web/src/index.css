@@ -1,0 +1,35 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Manrope:wght@400;500;600;700&display=swap');
+
+@theme {
+  --color-blush-50: #FAF8F5;      /* off-white page background */
+  --color-blush-100: #EFE6D8;     /* light beige — footer, subtle surfaces */
+  --color-blush-200: #E4D5BD;
+  --color-nudepink-300: #D8C6A0;
+  --color-nudepink-400: #C7AE85;
+  --color-rose-500: #3D2E24;      /* light beige — primary buttons */
+  --color-rose-600: #94765A;      /* button hover */
+  --color-espresso: #3D2E24;      /* dark brown text */
+  --color-muted: #7A6A5C;
+
+  --font-display: "Fraunces", serif;
+  --font-body: "Manrope", sans-serif;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-blush-50);
+  color: var(--color-espresso);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.animate-marquee {
+  animation: marquee 22s linear infinite;
+}

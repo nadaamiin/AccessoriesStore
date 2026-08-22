@@ -5,6 +5,8 @@ import {
   updateProduct,
   deleteProduct,
   uploadProductImage,
+  uploadProductImages,
+  deleteProductImage,
 } from "../api/products";
 import { getCategories } from "../api/categories";
 import ProductModal from "../components/ProductModal";
@@ -65,7 +67,7 @@ function Products() {
     }
   };
 
-  const handleSave = async (formData, imageFile) => {
+  const handleSave = async (formData, imageFile, galleryFiles, removedImageIds) => {
     try {
       let productId;
       if (editingProduct) {
@@ -75,9 +77,19 @@ function Products() {
         const res = await createProduct(formData);
         productId = res.data.id;
       }
+
       if (imageFile) {
         await uploadProductImage(productId, imageFile);
       }
+
+      if (removedImageIds && removedImageIds.length > 0) {
+        await Promise.all(removedImageIds.map((id) => deleteProductImage(id)));
+      }
+
+      if (galleryFiles && galleryFiles.length > 0) {
+        await uploadProductImages(productId, galleryFiles);
+      }
+
       setModalOpen(false);
       loadData();
     } catch (err) {
@@ -128,12 +140,27 @@ function Products() {
             <div className="flex-1 min-w-0">
               <div className="flex items-start justify-between gap-2">
                 <p className="text-espresso font-medium truncate">{p.name}</p>
-                <span className={`shrink-0 px-2 py-0.5 rounded-full text-[10px] font-medium ${p.isActive ? "bg-sage/15 text-sage" : "bg-nude-100 text-muted"}`}>
-                  {p.isActive ? "Active" : "Inactive"}
-                </span>
+                <div className="shrink-0 flex items-center">
+                  <span className={`px-2 py-0.5 rounded-full text-[10px] font-medium ${p.isActive ? "bg-sage/15 text-sage" : "bg-nude-100 text-muted"}`}>
+                    {p.isActive ? "Active" : "Inactive"}
+                  </span>
+                  {p.isOnSale && (
+                    <span className="ml-1.5 px-2 py-0.5 rounded-full text-[10px] font-medium bg-brick/10 text-brick">
+                      Sale
+                    </span>
+                  )}
+                </div>
               </div>
               <p className="text-xs text-muted mt-0.5">{p.categoryName}</p>
-              <p className="text-sm text-espresso mt-2">EGP {p.price.toFixed(2)} · Stock: {p.stockQuantity}</p>
+              {p.isOnSale && p.salePrice ? (
+                <p className="text-sm mt-2">
+                  <span className="text-muted line-through mr-1.5">EGP {p.price.toFixed(2)}</span>
+                  <span className="text-brick font-medium">EGP {p.salePrice.toFixed(2)}</span>
+                  <span className="text-espresso"> · Stock: {p.stockQuantity}</span>
+                </p>
+              ) : (
+                <p className="text-sm text-espresso mt-2">EGP {p.price.toFixed(2)} · Stock: {p.stockQuantity}</p>
+              )}
               <div className="flex gap-3 mt-2">
                 <button onClick={() => handleEditClick(p)} className="text-nude-500 hover:text-espresso text-sm font-medium transition">
                   Edit
@@ -184,7 +211,16 @@ function Products() {
                 </td>
                 <td className="px-5 py-3 text-espresso font-medium">{p.name}</td>
                 <td className="px-5 py-3 text-muted">{p.categoryName}</td>
-                <td className="px-5 py-3 text-espresso">EGP {p.price.toFixed(2)}</td>
+                <td className="px-5 py-3 text-espresso">
+                  {p.isOnSale && p.salePrice ? (
+                    <>
+                      <span className="text-muted line-through mr-1.5">EGP {p.price.toFixed(2)}</span>
+                      <span className="text-brick font-medium">EGP {p.salePrice.toFixed(2)}</span>
+                    </>
+                  ) : (
+                    <>EGP {p.price.toFixed(2)}</>
+                  )}
+                </td>
                 <td className="px-5 py-3 text-espresso">{p.stockQuantity}</td>
                 <td className="px-5 py-3">
                   <span
@@ -194,6 +230,11 @@ function Products() {
                   >
                     {p.isActive ? "Active" : "Inactive"}
                   </span>
+                  {p.isOnSale && (
+                    <span className="ml-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-brick/10 text-brick">
+                      Sale
+                    </span>
+                  )}
                 </td>
                 <td className="px-5 py-3 space-x-3 whitespace-nowrap">
                   <button onClick={() => handleEditClick(p)} className="text-nude-500 hover:text-espresso text-sm font-medium transition">
