@@ -11,6 +11,8 @@
   --color-rose-600: #94765A;      /* button hover */
   --color-espresso: #3D2E24;      /* dark brown text */
   --color-muted: #7A6A5C;
+  --color-line: #D6D3CC;
+  --color-nav: #E8DFD2;
 
   --font-display: "Fraunces", serif;
   --font-body: "Manrope", sans-serif;
@@ -31,8 +33,13 @@ body {
   to { transform: translateX(-50%); }
 }
 .animate-marquee {
-  animation: marquee 60s linear infinite;
+  animation: marquee 150s linear infinite;
 }
+
+.animate-announcement {
+  animation: marquee 40s linear infinite;
+}
+
 .range-thumb {
   height: 0;
 }

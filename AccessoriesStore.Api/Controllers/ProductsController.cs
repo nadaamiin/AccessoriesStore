@@ -33,6 +33,8 @@ public class ProductsController : ControllerBase
                 Id = p.Id,
                 Name = p.Name,
                 Description = p.Description,
+                Material = p.Material,
+                Dimensions = p.Dimensions,
                 Price = p.Price,
                 SalePrice = p.SalePrice,
                 IsOnSale = p.IsOnSale,
@@ -66,12 +68,15 @@ public class ProductsController : ControllerBase
             Id = product.Id,
             Name = product.Name,
             Description = product.Description,
+            Material = product.Material,
+            Dimensions = product.Dimensions,
             Price = product.Price,
             SalePrice = product.SalePrice,
             IsOnSale = product.IsOnSale,
             StockQuantity = product.StockQuantity,
             ImageUrl = product.ImageUrl,
             ImageUrls = product.Images.OrderBy(i => i.DisplayOrder).Select(i => i.Url).ToList(),
+            Images = product.Images.OrderBy(i => i.DisplayOrder).Select(i => new ProductImageDto { Id = i.Id, Url = i.Url }).ToList(),
             IsActive = product.IsActive,
             CategoryId = product.CategoryId,
             CategoryName = product.Category.Name
@@ -92,6 +97,8 @@ public class ProductsController : ControllerBase
                 Id = p.Id,
                 Name = p.Name,
                 Description = p.Description,
+                Material = p.Material,
+                Dimensions = p.Dimensions,
                 Price = p.Price,
                 SalePrice = p.SalePrice,
                 IsOnSale = p.IsOnSale,
@@ -121,6 +128,8 @@ public class ProductsController : ControllerBase
         {
             Name = dto.Name,
             Description = dto.Description,
+            Material = dto.Material,
+            Dimensions = dto.Dimensions,
             Price = dto.Price,
             StockQuantity = dto.StockQuantity,
             CategoryId = dto.CategoryId
@@ -134,6 +143,8 @@ public class ProductsController : ControllerBase
             Id = product.Id,
             Name = product.Name,
             Description = product.Description,
+            Material = product.Material,
+            Dimensions = product.Dimensions,
             Price = product.Price,
             StockQuantity = product.StockQuantity,
             ImageUrl = product.ImageUrl,
@@ -159,6 +170,8 @@ public class ProductsController : ControllerBase
 
         product.Name = dto.Name;
         product.Description = dto.Description;
+        product.Material = dto.Material;
+        product.Dimensions = dto.Dimensions;
         product.Price = dto.Price;
         product.SalePrice = dto.SalePrice;
         product.IsOnSale = dto.IsOnSale;

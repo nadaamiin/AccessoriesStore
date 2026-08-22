@@ -4,6 +4,8 @@ function ProductModal({ product, categories, onClose, onSave }) {
   const [form, setForm] = useState({
   name: "",
   description: "",
+  material: "",
+  dimensions: "",
   price: "",
   stockQuantity: "",
   categoryId: "",
@@ -25,13 +27,15 @@ function ProductModal({ product, categories, onClose, onSave }) {
       setForm({
       name: product.name,
       description: product.description || "",
+      material: product.material || "",
+      dimensions: product.dimensions || "",
       price: product.price,
       stockQuantity: product.stockQuantity,
       categoryId: product.categoryId,
       isActive: product.isActive,
       isOnSale: product.isOnSale || false,
       salePrice: product.salePrice || "",
-    });
+      });
       if (product.imageUrl) {
         setImagePreview(`https://localhost:7113${product.imageUrl}`);
       }
@@ -177,6 +181,16 @@ function ProductModal({ product, categories, onClose, onSave }) {
             <label className={labelClass}>Description</label>
             <textarea name="description" value={form.description} onChange={handleChange} rows={3} className={inputClass} />
           </div>
+
+          <div>
+          <label className={labelClass}>Material</label>
+          <input name="material" value={form.material} onChange={handleChange} placeholder="e.g. 925 Sterling Silver" className={inputClass} />
+        </div>
+
+        <div>
+          <label className={labelClass}>Dimensions</label>
+          <input name="dimensions" value={form.dimensions} onChange={handleChange} placeholder="e.g. 45cm chain length" className={inputClass} />
+        </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>

@@ -152,7 +152,7 @@ function ProductDetail() {
             <button
               onClick={handleAdd}
               disabled={product.stockQuantity === 0}
-              className="flex-1 py-3.5 rounded-full bg-rose-500 text-white text-sm font-medium hover:bg-rose-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 py-3.5 rounded-full bg-rose-500 text-white text-sm font-medium hover:opacity-90 transition disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {product.stockQuantity === 0 ? "Out of Stock" : "Add to Cart"}
             </button>
@@ -169,8 +169,12 @@ function ProductDetail() {
 
           {/* Accordions */}
           <div className="mt-10">
-            <Accordion title="Description & Material" defaultOpen>
-              <p>{product.description || "No description available."}</p>
+            <Accordion title="Description">
+              <div className="space-y-1.5">
+                <p>{product.description || "No description available."}</p>
+                {product.material && <p>Material: {product.material}</p>}
+                {product.dimensions && <p>Dims. in cm: {product.dimensions}</p>}
+              </div>
             </Accordion>
 
             <Accordion title="Delivery">
@@ -190,7 +194,7 @@ function ProductDetail() {
 
       {/* You may also like */}
       {related.length > 0 && (
-        <section className="max-w-6xl mx-auto py-16 border-t border-nudepink-200 text-center">
+        <section className="max-w-6xl mx-auto py-16 border-t border-line text-center">
           <h2 className="font-display text-2xl text-espresso mb-10">You May Also Like</h2>
           <div className="flex gap-5 overflow-x-auto px-6 pb-4 no-scrollbar snap-x snap-mandatory">
             {related.map((p) => (
@@ -203,10 +207,10 @@ function ProductDetail() {
       )}
 
       {/* Reviews */}
-      <section className="max-w-3xl mx-auto px-6 pt-16 border-t border-nudepink-200 text-center">
+      <section className="max-w-3xl mx-auto px-6 pt-16 border-t border-line text-center">
         <button
           onClick={() => setShowReviewForm((v) => !v)}
-          className="px-6 py-2.5 rounded-full bg-espresso text-white text-sm font-medium hover:bg-rose-600 transition"
+          className="px-6 py-2.5 rounded-full bg-espresso text-white text-sm font-medium hover:opacity-90 transition"
         >
           {showReviewForm ? "Cancel Review" : "Write a Review"}
         </button>

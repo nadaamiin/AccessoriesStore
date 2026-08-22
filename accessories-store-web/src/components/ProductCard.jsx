@@ -21,6 +21,7 @@ function ProductCard({ product }) {
 
   const handleAdd = (e) => {
     e.preventDefault();
+    if (product.stockQuantity === 0) return;
     addItem(product, 1);
   };
 
@@ -59,15 +60,12 @@ function ProductCard({ product }) {
           <span className="absolute top-3 left-3 bg-espresso text-white text-[10px] font-semibold px-2.5 py-1 rounded-full">
             Out of Stock
           </span>
-        ) : (
-          product.isOnSale && product.salePrice && (
-            <span className="absolute top-3 left-3 bg-rose-500 text-white text-[10px] font-semibold px-2.5 py-1 rounded-full">
-              Sale
-            </span>
-          )
-        )}
+        ) : product.isOnSale && product.salePrice != null ? (
+          <span className="absolute top-3 left-3 bg-rose-500 text-white text-[10px] font-semibold px-2.5 py-1 rounded-full">
+            Sale
+          </span>
+        ) : null}
 
-        {/* Dot indicators — only shown when there's more than one image */}
         {images.length > 1 && (
           <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
             {images.map((_, i) => (
@@ -83,7 +81,7 @@ function ProductCard({ product }) {
 
         <button
           onClick={handleFav}
-          className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 flex items-center justify-center hover:bg-white transition"
+          className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 flex items-center justify-center hover:bg-blush-100 transition"
           aria-label="Toggle favorite"
         >
           <svg width="15" height="15" viewBox="0 0 24 24" fill={fav ? "#A8896A" : "none"} stroke={fav ? "#A8896A" : "#7A6A5C"} strokeWidth="2">
@@ -92,17 +90,17 @@ function ProductCard({ product }) {
         </button>
 
         {product.stockQuantity > 0 && (
-        <button
-          onClick={handleAdd}
-          className="absolute bottom-3 right-3 w-9 h-9 rounded-full bg-white shadow-md flex items-center justify-center hover:bg-espresso hover:text-white transition"
-          aria-label="Add to cart"
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" strokeLinecap="round" strokeLinejoin="round" />
-            <path d="M3 6h18M16 10a4 4 0 0 1-8 0" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </button>
-      )}
+          <button
+            onClick={handleAdd}
+            className="absolute bottom-3 right-3 w-9 h-9 rounded-full bg-white shadow-md flex items-center justify-center hover:bg-blush-100 transition"
+            aria-label="Add to cart"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M3 6h18M16 10a4 4 0 0 1-8 0" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+        )}
       </div>
 
       <div className="pt-3 text-center">

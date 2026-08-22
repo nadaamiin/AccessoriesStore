@@ -24,11 +24,11 @@ function AppShell({ children, search }) {
   return (
     <div className="min-h-screen bg-nude-50">
       <header className="bg-white border-b border-nude-200 sticky top-0 z-30">
-        <div className="px-4 md:px-8 py-3 flex items-center gap-3">
-          {/* Hamburger — mobile only */}
+        <div className="px-4 lg:px-8 py-3 flex items-center gap-3">
+          {/* Hamburger — mobile + tablet */}
           <button
             onClick={() => setNavOpen((v) => !v)}
-            className="md:hidden shrink-0 p-2 rounded-md hover:bg-nude-50"
+            className="lg:hidden shrink-0 p-2 rounded-md hover:bg-nude-50"
             aria-label="Toggle menu"
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -47,8 +47,8 @@ function AppShell({ children, search }) {
             </div>
           </div>
 
-          {/* Nav links — desktop only */}
-          <nav className="hidden md:flex items-center gap-1 shrink-0">
+          {/* Nav links — true desktop only */}
+          <nav className="hidden lg:flex items-center gap-1 shrink-0">
             {navItems.map((item) => (
               <NavLink
                 key={item.to}
@@ -68,10 +68,10 @@ function AppShell({ children, search }) {
 
           {/* Search */}
           <div className="ml-auto flex items-center">
-            <div className="hidden md:block md:w-72 lg:w-96">{search}</div>
+            <div className="hidden lg:block lg:w-72 xl:w-96">{search}</div>
             <button
               onClick={() => setMobileSearchOpen((v) => !v)}
-              className="md:hidden p-2 rounded-md hover:bg-nude-50"
+              className="lg:hidden p-2 rounded-md hover:bg-nude-50"
               aria-label="Toggle search"
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -84,7 +84,7 @@ function AppShell({ children, search }) {
           {/* Sign Out — now with a filled background */}
           <button
             onClick={handleLogout}
-            className="shrink-0 flex items-center gap-1.5 px-3 md:px-4 py-2 rounded-md bg-[#8e625a] text-nude-50 text-sm font-medium hover:bg-nude-600 transition"
+            className="shrink-0 flex items-center gap-1.5 px-3 lg:px-4 py-2 rounded-md bg-[#8e625a] text-nude-50 text-sm font-medium hover:bg-nude-600 transition"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" strokeLinecap="round" strokeLinejoin="round" />
@@ -93,9 +93,9 @@ function AppShell({ children, search }) {
           </button>
         </div>
 
-        {/* Mobile nav dropdown */}
+        {/* Mobile + tablet nav dropdown */}
         {navOpen && (
-          <nav className="md:hidden border-t border-nude-200 px-4 py-2 flex flex-col">
+          <nav className="lg:hidden border-t border-nude-200 px-4 py-2 flex flex-col">
             {navItems.map((item) => (
               <NavLink
                 key={item.to}
@@ -115,9 +115,9 @@ function AppShell({ children, search }) {
           </nav>
         )}
 
-        {/* Mobile search dropdown */}
+        {/* Mobile + tablet search dropdown */}
         {mobileSearchOpen && (
-          <div className="md:hidden border-t border-nude-200 px-4 py-3">{search}</div>
+          <div className="lg:hidden border-t border-nude-200 px-4 py-3">{search}</div>
         )}
       </header>
 

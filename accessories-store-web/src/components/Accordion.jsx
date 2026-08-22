@@ -4,15 +4,15 @@ function Accordion({ title, children, defaultOpen = false }) {
   const [open, setOpen] = useState(defaultOpen);
 
   return (
-    <div className="border-b border-nudepink-200">
+    <div className="border-b border-line">
       <button
         onClick={() => setOpen((v) => !v)}
-        className="w-full flex items-center justify-between py-4 text-left"
+        className="w-full flex items-center justify-center relative py-4"
       >
-        <span className="text-xs font-semibold tracking-wide uppercase text-espresso">{title}</span>
-        <svg
+        <span className="text-xs font-semibold tracking-[0.2em] uppercase text-espresso">{title}</span>
+          <svg
           width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-          className={`text-muted transition-transform ${open ? "rotate-180" : ""}`}
+          className={`absolute right-0 text-muted transition-transform ${open ? "rotate-180" : ""}`}
         >
           <path d="m6 9 6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
         </svg>

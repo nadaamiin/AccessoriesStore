@@ -17,7 +17,7 @@ function AnnouncementBanner() {
 
   return (
     <div className="bg-rose-500 py-2 overflow-hidden">
-      <div className="flex w-max animate-marquee">
+      <div className="flex w-max animate-announcement">
         {items.map((text, i) => (
           <span key={i} className="flex items-center gap-6 px-6 whitespace-nowrap">
             <span className="text-white text-xs font-medium tracking-wide">{text}</span>

@@ -68,7 +68,7 @@ function ReviewForm({ productId, onSubmitted }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 max-w-md">
+    <form onSubmit={handleSubmit} className="space-y-4 max-w-md text-left">
       <div>
         <label className="block text-xs font-medium tracking-wide uppercase text-muted mb-1.5">
           Your Rating
@@ -125,8 +125,8 @@ function ReviewForm({ productId, onSubmitted }) {
       <button
         type="submit"
         disabled={submitting}
-        className="px-6 py-2.5 rounded-full bg-rose-500 text-white text-sm font-medium hover:bg-rose-600 transition disabled:opacity-50"
-      >
+        className="px-6 py-2.5 rounded-full bg-rose-500 text-white text-sm font-medium hover:opacity-90 transition disabled:opacity-50"
+     >
         {submitting ? "Submitting..." : "Submit Review"}
       </button>
     </form>

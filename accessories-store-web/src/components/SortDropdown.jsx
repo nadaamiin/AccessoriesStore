@@ -23,7 +23,7 @@ function SortDropdown({ value, onChange }) {
     <div className="relative" ref={ref}>
       <button
         onClick={() => setOpen((v) => !v)}
-        className="w-full flex items-center justify-center gap-2 py-3 bg-blush-100 text-xs font-semibold tracking-wide uppercase text-espresso hover:bg-blush-200 transition"
+        className="w-full flex items-center justify-center gap-2 py-3 bg-blush-100 text-xs font-semibold tracking-wide uppercase text-espresso hover:bg-nav hover:opacity-80 transition"
       >
         Sort
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

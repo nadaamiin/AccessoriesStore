@@ -171,7 +171,7 @@ function Products() {
         <div className="grid grid-cols-2 gap-3 mb-8">
           <button
             onClick={openDrawer}
-            className="flex items-center justify-center gap-2 py-3 bg-blush-100 text-xs font-semibold tracking-wide uppercase text-espresso hover:bg-blush-200 transition"
+            className="flex items-center justify-center gap-2 py-3 bg-blush-100 text-xs font-semibold tracking-wide uppercase text-espresso hover:bg-nav hover:opacity-80 transition"
           >
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M4 6h16M7 12h10M10 18h4" strokeLinecap="round" />

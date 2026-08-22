@@ -45,7 +45,7 @@ function Navbar() {
                 end={link.to === "/"}
                 className={({ isActive }) =>
                   `px-3.5 py-2 rounded-full text-sm font-medium transition ${
-                    isActive ? "text-espresso bg-nudepink-300/50" : "text-muted hover:text-espresso hover:bg-blush-100"
+                    isActive ? "text-espresso bg-nav" : "text-muted hover:text-espresso hover:bg-blush-100"
                   }`
                 }
               >
