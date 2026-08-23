@@ -48,7 +48,7 @@ function Footer() {
 
             {/* Email */}
             <a
-              href="mailto:PLACEHOLDER@example.com"
+              href="mailto:nara@gmail.com"
               className="flex items-center gap-2 hover:underline w-fit"
             >
               <svg
@@ -67,12 +67,12 @@ function Footer() {
                 />
               </svg>
 
-              PLACEHOLDER@example.com
+              nara@gmail.com
             </a>
 
             {/* Instagram */}
             <a
-              href="https://instagram.com/PLACEHOLDER"
+              href="https://instagram.com/nara_accesories"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 hover:underline w-fit"
@@ -95,7 +95,7 @@ function Footer() {
                 />
               </svg>
 
-              @PLACEHOLDER
+              @nara_accesories
             </a>
 
           </div>

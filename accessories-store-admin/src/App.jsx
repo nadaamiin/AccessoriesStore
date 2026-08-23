@@ -7,6 +7,7 @@ import Categories from "./pages/Categories";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Announcement from "./pages/Announcement";
 import Reviews from "./pages/Reviews";
+import Shipping from "./pages/Shipping";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
         <Route path="/announcement" element={<ProtectedRoute><Announcement /></ProtectedRoute>} />
         <Route path="/reviews" element={<ProtectedRoute><Reviews /></ProtectedRoute>} />
+        <Route path="/shipping" element={<ProtectedRoute><Shipping /></ProtectedRoute>} />
       </Routes>
     </BrowserRouter>
   );

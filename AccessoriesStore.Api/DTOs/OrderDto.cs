@@ -39,6 +39,7 @@ public class OrderDto
     public DateTime StatusChangedAt { get; set; }
     public decimal TotalAmount { get; set; }
     public DateTime CreatedAt { get; set; }
+    public decimal ShippingFee { get; set; }
     public List<OrderItemDto> Items { get; set; } = new();
 }
 public class UpdateOrderStatusDto

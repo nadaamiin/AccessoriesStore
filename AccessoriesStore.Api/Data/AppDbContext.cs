@@ -18,6 +18,7 @@ public class AppDbContext : IdentityDbContext<AdminUser>
 
     public DbSet<Announcement> Announcements => Set<Announcement>();
     public DbSet<Review> Reviews => Set<Review>();
+    public DbSet<ShippingSettings> ShippingSettings => Set<ShippingSettings>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -45,6 +46,18 @@ public class AppDbContext : IdentityDbContext<AdminUser>
 
         modelBuilder.Entity<Order>()
             .Property(o => o.TotalAmount)
+            .HasColumnType("decimal(18,2)");
+
+        modelBuilder.Entity<Order>()
+            .Property(o => o.ShippingFee)
+            .HasColumnType("decimal(18,2)");
+
+        modelBuilder.Entity<ShippingSettings>()
+            .Property(s => s.ShippingFee)
+            .HasColumnType("decimal(18,2)");
+
+        modelBuilder.Entity<ShippingSettings>()
+            .Property(s => s.FreeShippingThreshold)
             .HasColumnType("decimal(18,2)");
     }
 }

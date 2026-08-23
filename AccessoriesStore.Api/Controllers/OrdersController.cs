@@ -76,7 +76,18 @@ public class OrdersController : ControllerBase
             total += effectivePrice * item.Quantity;
         }
 
-        order.TotalAmount = total;
+        var shippingSettings = await _context.ShippingSettings.FirstOrDefaultAsync();
+        var shippingFee = shippingSettings?.ShippingFee ?? 0;
+        var freeShippingThreshold = shippingSettings?.FreeShippingThreshold ?? 0;
+
+        if (freeShippingThreshold > 0 && total >= freeShippingThreshold)
+        {
+            shippingFee = 0;
+        }
+
+        order.ShippingFee = shippingFee;
+        order.TotalAmount = total + shippingFee;
+
         order.StatusHistory.Add(new OrderStatusHistory
         {
             Status = OrderStatus.Pending,
@@ -139,6 +150,7 @@ public class OrdersController : ControllerBase
             Status = order.Status.ToString(),
             StatusChangedAt = latestChange?.ChangedAt ?? order.CreatedAt,
             TotalAmount = order.TotalAmount,
+            ShippingFee = order.ShippingFee,
             CreatedAt = order.CreatedAt,
             Items = order.OrderItems.Select(oi => new OrderItemDto
             {

@@ -17,7 +17,7 @@ function FavoritesDrawer() {
           favoritesOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
-        <div className="flex items-center justify-between px-6 py-5 border-b border-nudepink-200/50">
+        <div className="flex items-center justify-between px-6 py-5 border-b border-line">
           <h2 className="font-body text-lg font-extrabold tracking-[0.15em] uppercase text-espresso">
             Wishlist
           </h2>

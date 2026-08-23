@@ -1,15 +1,22 @@
 import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useUI } from "../context/UIContext";
-
-const FREE_SHIPPING_THRESHOLD = 2000;
+import { useState, useEffect } from "react";
+import { getShipping } from "../api/shipping";
 
 function CartDrawer() {
   const { items, updateQuantity, removeItem, totalPrice } = useCart();
   const { cartOpen, closeCart } = useUI();
+  const [shipping, setShipping] = useState({ shippingFee: 0, freeShippingThreshold: 0 });
 
-  const remaining = Math.max(0, FREE_SHIPPING_THRESHOLD - totalPrice);
-  const progressPct = Math.min(100, (totalPrice / FREE_SHIPPING_THRESHOLD) * 100);
+  useEffect(() => {
+    getShipping().then((res) => setShipping(res.data)).catch(() => {});
+  }, []);
+
+  const threshold = shipping.freeShippingThreshold;
+  const remaining = threshold > 0 ? Math.max(0, threshold - totalPrice) : 0;
+  const progressPct = threshold > 0 ? Math.min(100, (totalPrice / threshold) * 100) : 100;
+  const qualifiesForFreeShipping = threshold > 0 && totalPrice >= threshold;
 
   return (
     <>
@@ -20,7 +27,7 @@ function CartDrawer() {
           cartOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
-        <div className="flex items-center justify-between px-6 py-5 border-b border-nudepink-200/50">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-line">
           <h2 className="font-body text-lg font-extrabold tracking-[0.15em] uppercase text-espresso">
             Shopping Bag
           </h2>
@@ -32,26 +39,28 @@ function CartDrawer() {
         </div>
 
         {/* Free shipping progress */}
-        <div className="px-6 py-4">
-          <div className="bg-white rounded-2xl p-4">
-            <p className="text-center text-sm text-espresso mb-3">
-              {remaining > 0 ? (
-                <>You're <span className="font-semibold">LE {remaining.toFixed(2)}</span> away from Free Shipping!</>
-              ) : (
-                <span className="font-semibold">You've unlocked Free Shipping!</span>
-              )}
-            </p>
-            <div className="relative h-2 bg-nudepink-200 rounded-full overflow-hidden">
-              <div
-                className="absolute inset-y-0 left-0 bg-espresso rounded-full transition-all"
-                style={{ width: `${progressPct}%` }}
-              />
+        {threshold > 0 && (
+          <div className="px-6 py-4">
+            <div className="bg-white rounded-2xl p-4">
+              <p className="text-center text-sm text-espresso mb-3">
+                {remaining > 0 ? (
+                  <>You're <span className="font-semibold">LE {remaining.toFixed(2)}</span> away from Free Shipping!</>
+                ) : (
+                  <span className="font-semibold">You've unlocked Free Shipping!</span>
+                )}
+              </p>
+              <div className="relative h-2 bg-nudepink-200 rounded-full overflow-hidden">
+                <div
+                  className="absolute inset-y-0 left-0 bg-espresso rounded-full transition-all"
+                  style={{ width: `${progressPct}%` }}
+                />
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
         {/* Items */}
-        <div className="flex-1 overflow-y-auto px-6">
+        <div className="flex-1 overflow-y-auto px-6 pt-5">
           {items.length === 0 ? (
             <p className="text-center text-muted py-16 text-sm">Your bag is empty.</p>
           ) : (
@@ -67,7 +76,7 @@ function CartDrawer() {
                     <p className="text-sm font-semibold text-espresso uppercase leading-snug">{item.name}</p>
                     <p className="text-sm text-espresso font-medium mt-1">LE {item.price.toFixed(2)}</p>
                     <div className="flex items-center gap-3 mt-2">
-                      <div className="flex items-center border border-nudepink-200 rounded-full">
+                      <div className="flex items-center border border-line rounded-full">
                         <button
                           onClick={() => updateQuantity(item.productId, item.quantity - 1)}
                           className="w-7 h-7 flex items-center justify-center text-espresso hover:bg-blush-100 rounded-l-full transition"
@@ -101,21 +110,27 @@ function CartDrawer() {
 
         {/* Footer */}
         {items.length > 0 && (
-          <div className="border-t border-nudepink-200/50 px-6 py-5">
-            <div className="flex items-center justify-between mb-1">
-              <span className="text-xs font-semibold tracking-wide uppercase text-espresso">Subtotal</span>
-              <span className="text-espresso font-semibold">LE {totalPrice.toFixed(2)}</span>
-            </div>
-            <p className="text-xs text-muted mb-4">Shipping and discounts calculated at checkout.</p>
-            <Link
-              to="/checkout"
-              onClick={closeCart}
-              className="block text-center py-3.5 rounded-full bg-espresso text-white text-sm font-semibold tracking-wide uppercase hover:opacity-90 transition"
-            >
-              Check Out
-            </Link>
+        <div className="border-t border-line px-6 py-5">
+          <div className="flex items-center justify-between mb-1">
+            <span className="text-xs font-semibold tracking-wide uppercase text-espresso">Subtotal</span>
+            <span className="text-espresso font-semibold">LE {totalPrice.toFixed(2)}</span>
           </div>
-        )}
+          <p className="text-xs text-muted mb-4">
+            {qualifiesForFreeShipping
+              ? "Free shipping applied."
+              : shipping.shippingFee > 0
+              ? `+ LE ${shipping.shippingFee.toFixed(2)} shipping at checkout.`
+              : "Shipping calculated at checkout."}
+          </p>
+          <Link
+            to="/checkout"
+            onClick={closeCart}
+            className="block text-center py-3.5 rounded-full bg-espresso text-white text-sm font-semibold tracking-wide uppercase hover:opacity-90 transition"
+          >
+            Check Out
+          </Link>
+        </div>
+      )}
       </div>
     </>
   );
