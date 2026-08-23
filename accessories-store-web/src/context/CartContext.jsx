@@ -19,24 +19,27 @@ export function CartProvider({ children }) {
   }, [items]);
 
   const addItem = (product, quantity = 1) => {
-    setItems((prev) => {
-      const existing = prev.find((i) => i.productId === product.id);
-      if (existing) {
-        return prev.map((i) =>
-          i.productId === product.id ? { ...i, quantity: i.quantity + quantity } : i
-        );
-      }
-      return [
-        ...prev,
-        {
-          productId: product.id,
-          name: product.name,
-          price: product.price,
-          imageUrl: product.imageUrl,
-          quantity,
-        },
-      ];
-    });
+  const effectivePrice = product.isOnSale && product.salePrice ? product.salePrice : product.price;
+  setItems((prev) => {
+    const existing = prev.find((i) => i.productId === product.id);
+    if (existing) {
+      return prev.map((i) =>
+        i.productId === product.id ? { ...i, quantity: i.quantity + quantity } : i
+      );
+    }
+    return [
+      ...prev,
+      {
+        productId: product.id,
+        name: product.name,
+        price: effectivePrice,
+        originalPrice: product.price,
+        isOnSale: !!(product.isOnSale && product.salePrice),
+        imageUrl: product.imageUrl,
+        quantity,
+      },
+    ];
+  });
   };
 
   const removeItem = (productId) => {

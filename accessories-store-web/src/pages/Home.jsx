@@ -5,6 +5,7 @@ import Layout from "../components/Layout";
 import ProductCard from "../components/ProductCard";
 import Marquee from "../components/Marquee";
 import ReviewsSection from "../components/ReviewsSection";
+import bgImage from "../assets/bg.png";
 
 function Home() {
   const [products, setProducts] = useState([]);
@@ -16,31 +17,73 @@ function Home() {
   return (
     <Layout>
       {/* Hero */}
-      <section className="bg-gradient-to-br from-nudepink-300 via-blush-200 to-rose-500 px-6 py-20 md:py-28 text-center">
-        <span className="inline-block bg-white/80 text-rose-600 text-xs font-medium px-4 py-1.5 rounded-full mb-6">
-          ✦ Handmade with Love
-        </span>
-        <h1 className="font-display text-4xl md:text-6xl text-espresso mb-4">
-          Welcome to <span className="text-rose-600">Nara</span>
-        </h1>
-        <p className="text-muted max-w-xl mx-auto mb-8">
-          Discover unique handmade accessories that tell your story. Each piece crafted with love and attention to detail.
-        </p>
-        <div className="flex justify-center gap-3 flex-wrap">
-          <Link to="/products" className="px-6 py-3 rounded-full bg-rose-500 text-white text-sm font-medium hover:opacity-90 transition">
-            Shop Now
-          </Link>
-          <Link to="/about" className="px-6 py-3 rounded-full bg-white text-espresso text-sm font-medium hover:bg-blush-100 transition">
-            Our Story
-          </Link>
+      <section className="relative px-6 py-20 md:py-28 text-center overflow-hidden">
+        {/* Blurred background image */}
+        <div
+          className="absolute inset-0 bg-cover bg-[center_33%] bg-no-repeat scale-105 blur-[2px]"
+          style={{
+            backgroundImage: `url(${bgImage})`,
+          }}
+        />
+
+        {/* Soft overlay */}
+        <div className="absolute inset-0 bg-white/20" />
+
+        {/* Content */}
+        <div className="relative z-10">
+          <span className="inline-block bg-white/80 text-rose-600 text-xs font-medium px-4 py-1.5 rounded-full mb-6">
+            ✦ Handmade with Love
+          </span>
+
+          <h1 className="font-display text-4xl md:text-6xl text-espresso mb-4">
+            Welcome to{" "}
+          <span className="relative inline-block text-espresso font-bold px-3 py-1">
+            <span
+              className="
+                absolute
+                left-0
+                top-[20%]
+                h-[70%]
+                w-full
+                -z-10
+                bg-[#F1D1CB]
+                opacity-80
+                rounded-[70%_55%_55%_45%]
+                origin-left
+                animate-paint
+              "
+            ></span>
+              Nara
+            </span>
+          </h1>
+
+          <p className="text-muted max-w-xl mx-auto mb-8">
+            Discover unique handmade accessories that tell your story. Each piece
+            crafted with love and attention to detail.
+          </p>
+
+          <div className="flex justify-center gap-3 flex-wrap">
+            <Link
+              to="/products"
+              className="px-6 py-3 rounded-full bg-rose-500 text-white text-sm font-medium hover:opacity-90 transition"
+            >
+              Shop Now
+            </Link>
+
+            <Link
+              to="/about"
+              className="px-6 py-3 rounded-full bg-white text-espresso text-sm font-medium hover:bg-blush-100 transition"
+            >
+              Our Story
+            </Link>
+          </div>
         </div>
       </section>
-
       <Marquee />
 
       {/* Popular items */}
       <section className="py-16 max-w-6xl mx-auto text-center">
-        <span className="inline-block bg-nudepink-100 text-rose-600 text-xs font-medium px-4 py-1.5 rounded-full mb-4">
+        <span className="inline-block bg-nudepink-100 text-rose-600 text-xs font-medium px-4 py-1.5 rounded-2xl mb-4">
           ✦ Featured Collection
         </span>
         <h2 className="font-display text-3xl text-espresso mb-2">Our Popular Items</h2>

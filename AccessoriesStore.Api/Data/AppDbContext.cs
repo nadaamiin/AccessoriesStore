@@ -19,6 +19,7 @@ public class AppDbContext : IdentityDbContext<AdminUser>
     public DbSet<Announcement> Announcements => Set<Announcement>();
     public DbSet<Review> Reviews => Set<Review>();
     public DbSet<ShippingSettings> ShippingSettings => Set<ShippingSettings>();
+    public DbSet<PromoCode> PromoCodes => Set<PromoCode>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -58,6 +59,14 @@ public class AppDbContext : IdentityDbContext<AdminUser>
 
         modelBuilder.Entity<ShippingSettings>()
             .Property(s => s.FreeShippingThreshold)
+            .HasColumnType("decimal(18,2)");
+
+        modelBuilder.Entity<PromoCode>()
+            .Property(p => p.DiscountValue)
+            .HasColumnType("decimal(18,2)");
+
+        modelBuilder.Entity<Order>()
+            .Property(o => o.DiscountAmount)
             .HasColumnType("decimal(18,2)");
     }
 }

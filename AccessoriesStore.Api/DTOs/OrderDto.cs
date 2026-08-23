@@ -14,6 +14,7 @@ public class CreateOrderDto
     public string CustomerEmail { get; set; } = string.Empty;
     public string CustomerPhone { get; set; } = string.Empty;
     public string ShippingAddress { get; set; } = string.Empty;
+    public string? PromoCode { get; set; }
     public List<CreateOrderItemDto> Items { get; set; } = new();
 }
 
@@ -40,6 +41,8 @@ public class OrderDto
     public decimal TotalAmount { get; set; }
     public DateTime CreatedAt { get; set; }
     public decimal ShippingFee { get; set; }
+    public decimal DiscountAmount { get; set; }
+    public string? PromoCode { get; set; }
     public List<OrderItemDto> Items { get; set; } = new();
 }
 public class UpdateOrderStatusDto

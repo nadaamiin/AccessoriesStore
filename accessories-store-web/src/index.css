@@ -12,7 +12,7 @@
   --color-espresso: #3D2E24;      /* dark brown text */
   --color-muted: #7A6A5C;
   --color-line: #D6D3CC;
-  --color-nav: #E8DFD2;
+  --color-nav: #ECE5DC;
 
   --font-display: "Fraunces", serif;
   --font-body: "Manrope", sans-serif;
@@ -64,4 +64,24 @@ body {
   box-shadow: 0 1px 3px rgba(0,0,0,0.3);
   cursor: pointer;
   appearance: none;
+}
+@keyframes paint {
+  0% {
+    transform: scaleX(0) rotate(-3deg);
+    opacity: 0;
+  }
+
+  30% {
+    opacity: 0.8;
+  }
+
+  100% {
+    transform: scaleX(1) rotate(-3deg);
+    opacity: 0.8;
+  }
+}
+
+.animate-paint {
+  animation: paint 1s ease-out 0.4s forwards;
+  transform: scaleX(0);
 }

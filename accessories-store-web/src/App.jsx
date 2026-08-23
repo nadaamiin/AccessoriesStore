@@ -6,6 +6,8 @@ import ScrollToTop from "./components/ScrollToTop";
 import Home from "./pages/Home";
 import Products from "./pages/Products";
 import ProductDetail from "./pages/ProductDetail";
+import Checkout from "./pages/Checkout";
+import OrderConfirmation from "./pages/OrderConfirmation";
 
 function Placeholder({ title }) {
   return (
@@ -27,12 +29,13 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/products" element={<Products />} />
               <Route path="/products/:id" element={<ProductDetail />} />
-              <Route path="/checkout" element={<Placeholder title="Checkout" />} />
               <Route path="/about" element={<Placeholder title="About" />} />
               <Route path="/contact" element={<Placeholder title="Contact" />} />
               <Route path="/track-order" element={<Placeholder title="Track Order" />} />
               <Route path="/cart" element={<Navigate to="/" replace />} />
               <Route path="/favorites" element={<Navigate to="/" replace />} />
+              <Route path="/checkout" element={<Checkout />} />
+              <Route path="/order-confirmation" element={<OrderConfirmation />} />
             </Routes>
           </BrowserRouter>
         </UIProvider>

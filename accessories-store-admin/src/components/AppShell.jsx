@@ -10,6 +10,7 @@ const navItems = [
   { to: "/reviews", label: "Reviews" },
   { to: "/announcement", label: "Announcement" },
   { to: "/shipping", label: "Shipping" },
+  { to: "/promo-codes", label: "Promo Codes" },
 ];
 
 function AppShell({ children, search }) {
@@ -25,11 +26,11 @@ function AppShell({ children, search }) {
   return (
     <div className="min-h-screen bg-nude-50 overflow-x-hidden">
       <header className="bg-white border-b border-nude-200 sticky top-0 z-30">
-        <div className="max-w-full px-4 lg:px-6 py-3 flex items-center gap-2 lg:gap-3">
-          {/* Hamburger — mobile + tablet */}
+        <div className="max-w-full px-4 xl:px-6 py-3 flex items-center gap-2 xl:gap-3">
+          {/* Hamburger — mobile, tablet, and laptop */}
           <button
             onClick={() => setNavOpen((v) => !v)}
-            className="lg:hidden shrink-0 p-2 rounded-md hover:bg-nude-50"
+            className="xl:hidden shrink-0 p-2 rounded-md hover:bg-nude-50"
             aria-label="Toggle menu"
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -48,14 +49,14 @@ function AppShell({ children, search }) {
             </div>
           </div>
 
-          {/* Nav links — true desktop only, scrolls internally if it doesn't fit */}
-          <nav className="hidden lg:flex items-center gap-0.5 min-w-0 overflow-x-auto no-scrollbar">
+          {/* Nav links — true wide desktop only, no scrolling needed */}
+          <nav className="hidden xl:flex items-center gap-0.5 shrink-0">
             {navItems.map((item) => (
               <NavLink
                 key={item.to}
                 to={item.to}
                 className={({ isActive }) =>
-                  `px-2.5 py-2 rounded-md text-xs xl:text-sm font-medium whitespace-nowrap transition ${
+                  `px-2.5 py-2 rounded-md text-sm font-medium whitespace-nowrap transition ${
                     isActive
                       ? "text-espresso bg-nude-100"
                       : "text-muted hover:text-espresso hover:bg-nude-50"
@@ -69,10 +70,10 @@ function AppShell({ children, search }) {
 
           {/* Search */}
           <div className="ml-auto flex items-center shrink-0">
-            <div className="hidden lg:block lg:w-48 xl:w-72">{search}</div>
+            <div className="hidden xl:block xl:w-64 2xl:w-72">{search}</div>
             <button
               onClick={() => setMobileSearchOpen((v) => !v)}
-              className="lg:hidden p-2 rounded-md hover:bg-nude-50"
+              className="xl:hidden p-2 rounded-md hover:bg-nude-50"
               aria-label="Toggle search"
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -94,9 +95,9 @@ function AppShell({ children, search }) {
           </button>
         </div>
 
-        {/* Mobile + tablet nav dropdown */}
+        {/* Mobile/tablet/laptop nav dropdown */}
         {navOpen && (
-          <nav className="lg:hidden border-t border-nude-200 px-4 py-2 flex flex-col">
+          <nav className="xl:hidden border-t border-nude-200 px-4 py-2 flex flex-col max-h-[70vh] overflow-y-auto">
             {navItems.map((item) => (
               <NavLink
                 key={item.to}
@@ -116,9 +117,9 @@ function AppShell({ children, search }) {
           </nav>
         )}
 
-        {/* Mobile + tablet search dropdown */}
+        {/* Mobile/tablet/laptop search dropdown */}
         {mobileSearchOpen && (
-          <div className="lg:hidden border-t border-nude-200 px-4 py-3">{search}</div>
+          <div className="xl:hidden border-t border-nude-200 px-4 py-3">{search}</div>
         )}
       </header>
 

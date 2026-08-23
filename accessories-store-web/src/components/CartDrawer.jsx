@@ -74,7 +74,14 @@ function CartDrawer() {
                   />
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-semibold text-espresso uppercase leading-snug">{item.name}</p>
-                    <p className="text-sm text-espresso font-medium mt-1">LE {item.price.toFixed(2)}</p>
+                      {item.isOnSale ? (
+                        <div className="flex items-center gap-2 mt-1">
+                          <span className="text-muted text-xs line-through">LE {item.originalPrice.toFixed(2)}</span>
+                          <span className="text-sm text-rose-600 font-medium">LE {item.price.toFixed(2)}</span>
+                        </div>
+                      ) : (
+                        <p className="text-sm text-espresso font-medium mt-1">LE {item.price.toFixed(2)}</p>
+                      )}
                     <div className="flex items-center gap-3 mt-2">
                       <div className="flex items-center border border-line rounded-full">
                         <button

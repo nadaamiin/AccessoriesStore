@@ -19,6 +19,8 @@ namespace AccessoriesStore.Domain.Entities
         public decimal TotalAmount { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public decimal ShippingFee { get; set; } = 0;
+        public decimal DiscountAmount { get; set; } = 0;
+        public string? PromoCode { get; set; }
 
         public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
         public ICollection<OrderStatusHistory> StatusHistory { get; set; } = new List<OrderStatusHistory>();

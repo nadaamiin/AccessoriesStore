@@ -85,9 +85,9 @@ function ReviewsSection({ productId }) {
         )}
         <Stars rating={review.rating} />
 
-        <p className="font-display text-2xl text-espresso mt-5">{review.productName}</p>
+        <p className="font-body text-md font-extrabold tracking-[0.15em] uppercase text-espresso mt-5">{review.productName}</p>
 
-        <p className="text-muted mt-5 max-w-lg mx-auto">{review.comment}</p>
+        <p className="text-muted mt-2 max-w-lg mx-auto">{review.comment}</p>
         <p className="text-espresso text-sm font-medium mt-5">{review.customerName}</p>
         {total > 1 && (
           <>

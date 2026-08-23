@@ -14,10 +14,13 @@ public class OrdersController : ControllerBase
 {
     private readonly AppDbContext _context;
     private readonly IEmailService _emailService;
-    public OrdersController(AppDbContext context, IEmailService emailService)
+    private readonly PromoCodesController _promoCodesController;
+
+    public OrdersController(AppDbContext context, IEmailService emailService, PromoCodesController promoCodesController)
     {
         _context = context;
         _emailService = emailService;
+        _promoCodesController = promoCodesController;
     }
 
     // POST: api/orders
@@ -85,8 +88,20 @@ public class OrdersController : ControllerBase
             shippingFee = 0;
         }
 
+        decimal discountAmount = 0;
+        if (!string.IsNullOrWhiteSpace(dto.PromoCode))
+        {
+            var promoResult = await _promoCodesController.ValidateInternal(dto.PromoCode, total);
+            if (promoResult.Valid)
+            {
+                discountAmount = promoResult.DiscountAmount;
+                order.PromoCode = dto.PromoCode.Trim().ToUpper();
+            }
+        }
+
         order.ShippingFee = shippingFee;
-        order.TotalAmount = total + shippingFee;
+        order.DiscountAmount = discountAmount;
+        order.TotalAmount = total - discountAmount + shippingFee;
 
         order.StatusHistory.Add(new OrderStatusHistory
         {
@@ -151,6 +166,8 @@ public class OrdersController : ControllerBase
             StatusChangedAt = latestChange?.ChangedAt ?? order.CreatedAt,
             TotalAmount = order.TotalAmount,
             ShippingFee = order.ShippingFee,
+            DiscountAmount = order.DiscountAmount,
+            PromoCode = order.PromoCode,
             CreatedAt = order.CreatedAt,
             Items = order.OrderItems.Select(oi => new OrderItemDto
             {
