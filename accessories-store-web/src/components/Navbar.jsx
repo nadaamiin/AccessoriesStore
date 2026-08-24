@@ -1,21 +1,32 @@
 import { useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import MobileSidebar from "./MobileSidebar";
 import logo from "../assets/logo.png";
 import { useUI } from "../context/UIContext";
+import { useSearch } from "../context/SearchContext";
 
 const navLinks = [
   { to: "/", label: "Home" },
   { to: "/products", label: "Products" },
-  { to: "/about", label: "About" },
   { to: "/contact", label: "Contact" },
 ];
 
 function Navbar() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const { totalCount } = useCart();
   const { openCart, openFavorites } = useUI();
+  const { searchQuery, setSearchQuery } = useSearch();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleSearchChange = (value) => {
+    setSearchQuery(value);
+    if (location.pathname !== "/products") {
+      navigate("/products");
+    }
+  };
 
   return (
     <>
@@ -56,12 +67,40 @@ function Navbar() {
             ))}
           </nav>
 
-          <div className="ml-auto flex items-center gap-1">
+          <div className="ml-auto flex items-center gap-2">
+            <div className="relative hidden sm:block w-36 md:w-48">
+              <svg
+                width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-muted"
+              >
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.3-4.3" strokeLinecap="round" />
+              </svg>
+              <input
+                value={searchQuery}
+                onChange={(e) => handleSearchChange(e.target.value)}
+                placeholder="Search…"
+                className="w-full bg-blush-100 border border-transparent rounded-full pl-9 pr-3 py-1.5 text-sm text-espresso placeholder:text-muted/60 focus:outline-none focus:border-espresso focus:bg-white transition"
+              />
+            </div>
+
+            <button
+              onClick={() => setMobileSearchOpen((v) => !v)}
+              className="sm:hidden p-2.5 rounded-full hover:bg-blush-100 text-espresso"
+              aria-label="Search"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.3-4.3" strokeLinecap="round" />
+              </svg>
+            </button>
+
             <button onClick={openFavorites} className="p-2.5 rounded-full hover:bg-blush-100 text-espresso" aria-label="Wishlist">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z" strokeLinejoin="round" />
               </svg>
             </button>
+
             <button onClick={openCart} className="relative p-2.5 rounded-full hover:bg-blush-100 text-espresso" aria-label="Cart">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" />
@@ -75,6 +114,26 @@ function Navbar() {
             </button>
           </div>
         </div>
+
+        {mobileSearchOpen && (
+          <div className="sm:hidden border-t border-blush-200 px-4 py-3">
+            <div className="relative">
+              <svg
+                width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-muted"
+              >
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.3-4.3" strokeLinecap="round" />
+              </svg>
+              <input
+                value={searchQuery}
+                onChange={(e) => handleSearchChange(e.target.value)}
+                placeholder="Search products…"
+                className="w-full bg-blush-100 border border-transparent rounded-full pl-9 pr-3 py-2 text-sm text-espresso placeholder:text-muted/60 focus:outline-none focus:border-espresso focus:bg-white transition"
+              />
+            </div>
+          </div>
+        )}
       </header>
 
       <MobileSidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />

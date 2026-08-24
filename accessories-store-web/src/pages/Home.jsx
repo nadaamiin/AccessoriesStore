@@ -70,12 +70,9 @@ function Home() {
               Shop Now
             </Link>
 
-            <Link
-              to="/about"
-              className="px-6 py-3 rounded-full bg-white text-espresso text-sm font-medium hover:bg-blush-100 transition"
-            >
-              Our Story
-            </Link>
+            <Link to="/contact" className="px-6 py-3 rounded-full bg-white text-espresso text-sm font-medium hover:bg-blush-100 transition">
+            Get in Touch
+          </Link>
           </div>
         </div>
       </section>

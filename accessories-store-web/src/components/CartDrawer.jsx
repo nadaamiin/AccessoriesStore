@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { getShipping } from "../api/shipping";
 
 function CartDrawer() {
-  const { items, updateQuantity, removeItem, totalPrice } = useCart();
+  const { items, updateQuantity, removeItem, totalPrice, totalOriginalPrice } = useCart();
   const { cartOpen, closeCart } = useUI();
   const [shipping, setShipping] = useState({ shippingFee: 0, freeShippingThreshold: 0 });
 
@@ -118,11 +118,16 @@ function CartDrawer() {
         {/* Footer */}
         {items.length > 0 && (
         <div className="border-t border-line px-6 py-5">
-          <div className="flex items-center justify-between mb-1">
-            <span className="text-xs font-semibold tracking-wide uppercase text-espresso">Subtotal</span>
-            <span className="text-espresso font-semibold">LE {totalPrice.toFixed(2)}</span>
+          <div className="flex items-start justify-between">
+          <span className="text-xs font-semibold tracking-wide uppercase text-espresso pt-1">Subtotal</span>
+          <div className="text-right leading-tight">
+            {totalOriginalPrice > totalPrice && (
+              <p className="text-muted text-xs line-through">LE {totalOriginalPrice.toFixed(2)}</p>
+            )}
+            <p className="text-espresso font-semibold text-base">LE {totalPrice.toFixed(2)}</p>
           </div>
-          <p className="text-xs text-muted mb-4">
+        </div>
+          <p className="text-xs text-muted leading-none mb-0.5">
             {qualifiesForFreeShipping
               ? "Free shipping applied."
               : shipping.shippingFee > 0
@@ -132,7 +137,7 @@ function CartDrawer() {
           <Link
             to="/checkout"
             onClick={closeCart}
-            className="block text-center py-3.5 rounded-full bg-espresso text-white text-sm font-semibold tracking-wide uppercase hover:opacity-90 transition"
+            className="block text-center py-3.5 mt-4 rounded-full bg-espresso text-white text-sm font-semibold tracking-wide uppercase hover:opacity-90 transition"
           >
             Check Out
           </Link>

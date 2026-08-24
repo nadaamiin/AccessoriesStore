@@ -20,6 +20,7 @@ public class AppDbContext : IdentityDbContext<AdminUser>
     public DbSet<Review> Reviews => Set<Review>();
     public DbSet<ShippingSettings> ShippingSettings => Set<ShippingSettings>();
     public DbSet<PromoCode> PromoCodes => Set<PromoCode>();
+    public DbSet<ContactMessage> ContactMessages => Set<ContactMessage>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

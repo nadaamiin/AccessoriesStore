@@ -46,7 +46,7 @@ function MobilePromoAndTotals(props) {
         </button>
 
         {totalSavings > 0 && (
-          <p className="text-xs text-muted px-5 -mt-2 pb-3 flex items-center gap-1">🏷 Total savings LE {totalSavings.toFixed(2)}</p>
+          <p className="text-xs text-muted px-5 -mt-2 pb-3">Total savings LE {totalSavings.toFixed(2)}</p>
         )}
 
         {open && (

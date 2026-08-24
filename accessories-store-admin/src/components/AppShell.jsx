@@ -10,6 +10,7 @@ const navItems = [
   { to: "/reviews", label: "Reviews" },
   { to: "/announcement", label: "Announcement" },
   { to: "/shipping", label: "Shipping" },
+  { to: "/messages", label: "Messages" },
   { to: "/promo-codes", label: "Promo Codes" },
 ];
 

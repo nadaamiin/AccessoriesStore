@@ -6,6 +6,7 @@ import Layout from "../components/Layout";
 import ProductCard from "../components/ProductCard";
 import FilterDrawer from "../components/FilterDrawer";
 import SortDropdown from "../components/SortDropdown";
+import { useSearch } from "../context/SearchContext";
 
 function Products() {
   const [products, setProducts] = useState([]);
@@ -30,7 +31,8 @@ function Products() {
   const [draftInStock, setDraftInStock] = useState(false);
   const [draftOutOfStock, setDraftOutOfStock] = useState(false);
   const [draftCategory, setDraftCategory] = useState("");
-
+  const { searchQuery } = useSearch();
+  
   useEffect(() => {
     Promise.all([getProducts(), getCategories()])
       .then(([productsRes, categoriesRes]) => {
@@ -107,6 +109,12 @@ function Products() {
     if (activeCategory) {
       list = list.filter((p) => String(p.categoryId) === String(activeCategory));
     }
+
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase();
+        list = list.filter((p) => p.name.toLowerCase().includes(q));
+      }
+
     if (onSaleOnly) list = list.filter((p) => p.isOnSale);
     if (inStockOnly) list = list.filter((p) => p.stockQuantity > 0);
     if (outOfStockOnly) list = list.filter((p) => p.stockQuantity === 0);
@@ -128,7 +136,7 @@ function Products() {
     }
 
     return sorted;
-  }, [products, activeCategory, onSaleOnly, inStockOnly, outOfStockOnly, minPrice, maxPrice, sort]);
+  }, [products, activeCategory, onSaleOnly, inStockOnly, outOfStockOnly, minPrice, maxPrice, sort, searchQuery]);
 
   const hasActiveFilters =
     activeCategory || onSaleOnly || inStockOnly || outOfStockOnly ||
@@ -186,7 +194,9 @@ function Products() {
         {loading ? (
           <p className="text-center text-muted py-20">Loading…</p>
         ) : filteredProducts.length === 0 ? (
-          <p className="text-center text-muted py-20">No products match your filters.</p>
+        <p className="text-center text-muted py-20">
+          {searchQuery ? `No products match "${searchQuery}".` : "No products match your filters."}
+        </p>
         ) : (
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
             {filteredProducts.map((p) => (

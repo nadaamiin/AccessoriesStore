@@ -89,7 +89,7 @@ function ProductCard({ product }) {
           className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 flex items-center justify-center hover:bg-blush-100 transition"
           aria-label="Toggle favorite"
         >
-          <svg width="15" height="15" viewBox="0 0 24 24" fill={fav ? "#A8896A" : "none"} stroke={fav ? "#A8896A" : "#7A6A5C"} strokeWidth="2">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill={fav ? "#dd9cc1" : "none"} stroke={fav ? "#dd9cc1" : "#dd9cc1"} strokeWidth="2">
             <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z" strokeLinejoin="round" />
           </svg>
         </button>

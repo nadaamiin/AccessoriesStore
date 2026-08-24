@@ -9,6 +9,7 @@ import Announcement from "./pages/Announcement";
 import Reviews from "./pages/Reviews";
 import Shipping from "./pages/Shipping";
 import PromoCodes from "./pages/PromoCodes";
+import Messages from "./pages/Messages";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="/reviews" element={<ProtectedRoute><Reviews /></ProtectedRoute>} />
         <Route path="/shipping" element={<ProtectedRoute><Shipping /></ProtectedRoute>} />
         <Route path="/promo-codes" element={<ProtectedRoute><PromoCodes /></ProtectedRoute>} />
+        <Route path="/messages" element={<ProtectedRoute><Messages /></ProtectedRoute>} />
       </Routes>
     </BrowserRouter>
   );

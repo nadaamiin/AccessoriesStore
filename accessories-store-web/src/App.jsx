@@ -8,6 +8,8 @@ import Products from "./pages/Products";
 import ProductDetail from "./pages/ProductDetail";
 import Checkout from "./pages/Checkout";
 import OrderConfirmation from "./pages/OrderConfirmation";
+import Contact from "./pages/Contact";
+import { SearchProvider } from "./context/SearchContext";
 
 function Placeholder({ title }) {
   return (
@@ -22,23 +24,24 @@ function App() {
   return (
     <CartProvider>
       <FavoritesProvider>
-        <UIProvider>
-          <BrowserRouter>
-            <ScrollToTop />
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/products" element={<Products />} />
-              <Route path="/products/:id" element={<ProductDetail />} />
-              <Route path="/about" element={<Placeholder title="About" />} />
-              <Route path="/contact" element={<Placeholder title="Contact" />} />
-              <Route path="/track-order" element={<Placeholder title="Track Order" />} />
-              <Route path="/cart" element={<Navigate to="/" replace />} />
-              <Route path="/favorites" element={<Navigate to="/" replace />} />
-              <Route path="/checkout" element={<Checkout />} />
-              <Route path="/order-confirmation" element={<OrderConfirmation />} />
-            </Routes>
-          </BrowserRouter>
-        </UIProvider>
+        <SearchProvider>
+          <UIProvider>
+            <BrowserRouter>
+              <ScrollToTop />
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/products" element={<Products />} />
+                <Route path="/products/:id" element={<ProductDetail />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/track-order" element={<Placeholder title="Track Order" />} />
+                <Route path="/cart" element={<Navigate to="/" replace />} />
+                <Route path="/favorites" element={<Navigate to="/" replace />} />
+                <Route path="/checkout" element={<Checkout />} />
+                <Route path="/order-confirmation" element={<OrderConfirmation />} />
+              </Routes>
+            </BrowserRouter>
+          </UIProvider>
+        </SearchProvider>
       </FavoritesProvider>
     </CartProvider>
   );

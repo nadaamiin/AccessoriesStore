@@ -28,10 +28,6 @@ function Footer() {
               All Products
             </Link>
 
-            <Link to="/about" className="hover:underline">
-              About
-            </Link>
-
             <Link to="/contact" className="hover:underline">
               Contact
             </Link>
@@ -72,7 +68,7 @@ function Footer() {
 
             {/* Instagram */}
             <a
-              href="https://instagram.com/nara_accesories"
+              href="https://instagram.com/nara__accessories_"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 hover:underline w-fit"
@@ -95,7 +91,7 @@ function Footer() {
                 />
               </svg>
 
-              @nara_accesories
+              @nara__accessories_
             </a>
 
           </div>

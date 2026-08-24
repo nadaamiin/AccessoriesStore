@@ -20,11 +20,11 @@ function MobileOrderSummary(props) {
             <path d="m6 9 6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </span>
-        <span className="flex items-center gap-2">
+        <span className="text-right leading-tight">
           {totalSavings > 0 && (
-            <span className="text-muted text-xs line-through">LE {totalBeforeSavings.toFixed(2)}</span>
+            <p className="text-muted text-xs line-through">LE {totalBeforeSavings.toFixed(2)}</p>
           )}
-          <span className="font-body font-bold text-espresso">LE {total.toFixed(2)}</span>
+          <p className="font-body font-bold text-espresso">LE {total.toFixed(2)}</p>
         </span>
       </button>
 

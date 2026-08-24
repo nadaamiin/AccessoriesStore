@@ -8,6 +8,7 @@ import CheckoutHeader from "../components/CheckoutHeader";
 import MobileOrderSummary from "../components/MobileOrderSummary";
 import MobilePromoAndTotals from "../components/MobilePromoAndTotals";
 import OrderSummaryPanel from "../components/OrderSummaryPanel";
+import CartDrawer from "../components/CartDrawer";
 
 const GOVERNORATES = [
   "Cairo", "Giza", "Alexandria", "Qalyubia", "Sharqia", "Dakahlia",
@@ -167,14 +168,15 @@ function Checkout() {
   };
 
   if (items.length === 0) {
-    return (
-      <div className="min-h-screen bg-blush-50">
-        <CheckoutHeader />
-        <div className="max-w-3xl mx-auto px-6 py-20 text-center">
-          <p className="text-muted">Your bag is empty — add something before checking out.</p>
-        </div>
+  return (
+    <div className="min-h-screen bg-blush-50">
+      <CheckoutHeader />
+      <CartDrawer />
+      <div className="max-w-3xl mx-auto px-6 py-20 text-center">
+        <p className="text-muted">Your bag is empty — add something before checking out.</p>
       </div>
-    );
+    </div>
+  );
   }
 
   const summaryProps = {
@@ -188,6 +190,7 @@ function Checkout() {
   return (
     <div className="min-h-screen bg-blush-50">
       <CheckoutHeader />
+      <CartDrawer />
 
       <div className="max-w-6xl mx-auto px-6 py-8">
         <MobileOrderSummary {...summaryProps} />
