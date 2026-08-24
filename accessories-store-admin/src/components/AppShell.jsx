@@ -70,8 +70,8 @@ function AppShell({ children, search }) {
           </nav>
 
           {/* Search */}
-          <div className="ml-auto flex items-center shrink-0">
-            <div className="hidden xl:block xl:w-64 2xl:w-72">{search}</div>
+          <div className="ml-auto flex items-center min-w-0">
+            <div className="hidden xl:block xl:w-48 2xl:w-64">{search}</div>
             <button
               onClick={() => setMobileSearchOpen((v) => !v)}
               className="xl:hidden p-2 rounded-md hover:bg-nude-50"
@@ -97,27 +97,50 @@ function AppShell({ children, search }) {
         </div>
 
         {/* Mobile/tablet/laptop nav dropdown */}
-        {navOpen && (
-          <nav className="xl:hidden border-t border-nude-200 px-4 py-2 flex flex-col max-h-[70vh] overflow-y-auto">
-            {navItems.map((item) => (
-              <NavLink
-                key={item.to}
-                to={item.to}
-                onClick={() => setNavOpen(false)}
-                className={({ isActive }) =>
-                  `px-3 py-2.5 rounded-md text-sm font-medium transition ${
-                    isActive
-                      ? "text-espresso bg-nude-100"
-                      : "text-muted hover:text-espresso hover:bg-nude-50"
-                  }`
-                }
-              >
-                {item.label}
-              </NavLink>
-            ))}
-          </nav>
-        )}
-
+         {navOpen && (  
+          <div  
+            className="xl:hidden fixed inset-0 bg-espresso/40 z-40"  
+            onClick={() => setNavOpen(false)}  
+          />  
+        )}  
+        <nav  
+          className={`xl:hidden fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-xl transition-transform duration-300 flex flex-col p-4 overflow-y-auto ${  
+            navOpen ? "translate-x-0" : "-translate-x-full"  
+          }`}  
+        >  
+          <div className="flex items-center justify-between mb-4">  
+            <div className="flex items-center gap-2">  
+              <img src={logo} alt="Nara Accessories" className="w-9 h-9 rounded-full object-cover" />  
+              <p className="font-display text-sm text-espresso">Nara</p>  
+            </div>  
+            <button  
+              onClick={() => setNavOpen(false)}  
+              className="p-2 rounded-md hover:bg-nude-50"  
+              aria-label="Close menu"  
+            >  
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">  
+                <path d="M18 6 6 18M6 6l12 12" strokeLinecap="round" />  
+              </svg>  
+            </button>  
+          </div>  
+          {navItems.map((item) => (  
+            <NavLink  
+              key={item.to}  
+              to={item.to}  
+              onClick={() => setNavOpen(false)}  
+              className={({ isActive }) =>  
+                `px-3 py-2.5 rounded-md text-sm font-medium transition ${  
+                  isActive  
+                    ? "text-espresso bg-nude-100"  
+                    : "text-muted hover:text-espresso hover:bg-nude-50"  
+                }`  
+              }  
+            >  
+              {item.label}  
+            </NavLink>  
+          ))}  
+        </nav>
+        
         {/* Mobile/tablet/laptop search dropdown */}
         {mobileSearchOpen && (
           <div className="xl:hidden border-t border-nude-200 px-4 py-3">{search}</div>
