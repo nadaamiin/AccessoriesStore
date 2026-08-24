@@ -10,23 +10,19 @@ namespace AccessoriesStore.Tests.Unit.Services;
 
 public class PromoCodeServiceTests
 {
-    private readonly Mock<AppDbContext> _mockContext;
-    private readonly PromoCodeService _service;
-
-    public PromoCodeServiceTests()
-    {
-        _mockContext = new Mock<AppDbContext>();
-        _service = new PromoCodeService(_mockContext.Object);
-    }
-
     [Fact]
     public async Task ValidateAsync_WithNullCode_ShouldReturnInvalid()
     {
         // Arrange
+        var mockDbSet = new Mock<DbSet<PromoCode>>();
+        var mockContext = new Mock<AppDbContext>();
+        mockContext.Setup(m => m.PromoCodes).Returns(mockDbSet.Object);
+        
+        var service = new PromoCodeService(mockContext.Object);
         var subtotal = 100m;
 
         // Act
-        var result = await _service.ValidateAsync(null, subtotal);
+        var result = await service.ValidateAsync(null, subtotal);
 
         // Assert
         result.Valid.Should().BeFalse();
@@ -38,10 +34,15 @@ public class PromoCodeServiceTests
     public async Task ValidateAsync_WithEmptyCode_ShouldReturnInvalid()
     {
         // Arrange
+        var mockDbSet = new Mock<DbSet<PromoCode>>();
+        var mockContext = new Mock<AppDbContext>();
+        mockContext.Setup(m => m.PromoCodes).Returns(mockDbSet.Object);
+        
+        var service = new PromoCodeService(mockContext.Object);
         var subtotal = 100m;
 
         // Act
-        var result = await _service.ValidateAsync("   ", subtotal);
+        var result = await service.ValidateAsync("   ", subtotal);
 
         // Assert
         result.Valid.Should().BeFalse();
@@ -52,7 +53,7 @@ public class PromoCodeServiceTests
     [Theory]
     [InlineData("PERCENT20", true, 20, 100, 20)]
     [InlineData("FIXED10", false, 10, 100, 10)]
-    public async Task ValidateAsync_WithValidPercentageCode_ShouldCalculateDiscount(
+    public async Task ValidateAsync_WithValidCode_ShouldCalculateDiscount(
         string code, bool isPercentage, decimal discountValue, decimal subtotal, decimal expectedDiscount)
     {
         // Arrange
@@ -72,10 +73,13 @@ public class PromoCodeServiceTests
                 It.IsAny<CancellationToken>()))
             .ReturnsAsync(promoCode);
 
-        _mockContext.Setup(m => m.PromoCodes).Returns(mockDbSet.Object);
+        var mockContext = new Mock<AppDbContext>();
+        mockContext.Setup(m => m.PromoCodes).Returns(mockDbSet.Object);
+        
+        var service = new PromoCodeService(mockContext.Object);
 
         // Act
-        var result = await _service.ValidateAsync(code, subtotal);
+        var result = await service.ValidateAsync(code, subtotal);
 
         // Assert
         result.Valid.Should().BeTrue();
@@ -102,10 +106,13 @@ public class PromoCodeServiceTests
                 It.IsAny<CancellationToken>()))
             .ReturnsAsync(promoCode);
 
-        _mockContext.Setup(m => m.PromoCodes).Returns(mockDbSet.Object);
+        var mockContext = new Mock<AppDbContext>();
+        mockContext.Setup(m => m.PromoCodes).Returns(mockDbSet.Object);
+        
+        var service = new PromoCodeService(mockContext.Object);
 
         // Act
-        var result = await _service.ValidateAsync("EXPIRED", 100m);
+        var result = await service.ValidateAsync("EXPIRED", 100m);
 
         // Assert
         result.Valid.Should().BeFalse();
@@ -132,10 +139,13 @@ public class PromoCodeServiceTests
                 It.IsAny<CancellationToken>()))
             .ReturnsAsync(promoCode);
 
-        _mockContext.Setup(m => m.PromoCodes).Returns(mockDbSet.Object);
+        var mockContext = new Mock<AppDbContext>();
+        mockContext.Setup(m => m.PromoCodes).Returns(mockDbSet.Object);
+        
+        var service = new PromoCodeService(mockContext.Object);
 
         // Act
-        var result = await _service.ValidateAsync("INACTIVE", 100m);
+        var result = await service.ValidateAsync("INACTIVE", 100m);
 
         // Assert
         result.Valid.Should().BeFalse();
@@ -162,15 +172,41 @@ public class PromoCodeServiceTests
                 It.IsAny<CancellationToken>()))
             .ReturnsAsync(promoCode);
 
-        _mockContext.Setup(m => m.PromoCodes).Returns(mockDbSet.Object);
-
+        var mockContext = new Mock<AppDbContext>();
+        mockContext.Setup(m => m.PromoCodes).Returns(mockDbSet.Object);
+        
+        var service = new PromoCodeService(mockContext.Object);
         var subtotal = 100m; // Only $100 subtotal
 
         // Act
-        var result = await _service.ValidateAsync("FIXED500", subtotal);
+        var result = await service.ValidateAsync("FIXED500", subtotal);
 
         // Assert
         result.Valid.Should().BeTrue();
         result.DiscountAmount.Should().Be(100m); // Should be capped at subtotal
+    }
+
+    [Fact]
+    public async Task ValidateAsync_WithNonExistentCode_ShouldReturnInvalid()
+    {
+        // Arrange
+        var mockDbSet = new Mock<DbSet<PromoCode>>();
+        mockDbSet
+            .Setup(m => m.FirstOrDefaultAsync(
+                It.IsAny<System.Linq.Expressions.Expression<System.Func<PromoCode, bool>>>(),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync((PromoCode)null!);
+
+        var mockContext = new Mock<AppDbContext>();
+        mockContext.Setup(m => m.PromoCodes).Returns(mockDbSet.Object);
+        
+        var service = new PromoCodeService(mockContext.Object);
+
+        // Act
+        var result = await service.ValidateAsync("NOTEXIST", 100m);
+
+        // Assert
+        result.Valid.Should().BeFalse();
+        result.Message.Should().Contain("Invalid");
     }
 }
