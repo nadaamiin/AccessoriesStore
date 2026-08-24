@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import MobileSidebar from "./MobileSidebar";
@@ -17,16 +17,28 @@ function Navbar() {
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const { totalCount } = useCart();
   const { openCart, openFavorites } = useUI();
-  const { searchQuery, setSearchQuery } = useSearch();
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  const handleSearchChange = (value) => {
-    setSearchQuery(value);
-    if (location.pathname !== "/products") {
-      navigate("/products");
-    }
-  };
+  const { searchQuery, setSearchQuery, shouldFocusSearch, setShouldFocusSearch } = useSearch();  
+  const navigate = useNavigate();  
+  const location = useLocation();  
+  const searchInputRef = useRef(null);  
+  
+  const handleSearchChange = (value) => {  
+    setSearchQuery(value);  
+    if (location.pathname !== "/products") {  
+      setShouldFocusSearch(true);  
+      navigate("/products");  
+    }  
+  };  
+  
+  useEffect(() => {  
+    if (location.pathname === "/products" && shouldFocusSearch && searchInputRef.current) {  
+      const input = searchInputRef.current;  
+      input.focus();  
+      const len = input.value.length;  
+      input.setSelectionRange(len, len);  
+      setShouldFocusSearch(false);  
+    }  
+  }, [location.pathname, shouldFocusSearch, setShouldFocusSearch]);
 
   return (
     <>
@@ -77,6 +89,7 @@ function Navbar() {
                 <path d="m21 21-4.3-4.3" strokeLinecap="round" />
               </svg>
               <input
+                ref={searchInputRef}
                 value={searchQuery}
                 onChange={(e) => handleSearchChange(e.target.value)}
                 placeholder="Search…"
