@@ -118,8 +118,7 @@ public class OrdersController : ControllerBase
         // Send confirmation email (don't let email failure break the order)
         try
         {
-            await _emailService.SendOrderConfirmationAsync(
-                order.CustomerEmail, order.CustomerName, order.OrderNumber, order.TotalAmount);
+            await _emailService.SendOrderConfirmationAsync(order.CustomerEmail, result);
         }
         catch (Exception ex)
         {
