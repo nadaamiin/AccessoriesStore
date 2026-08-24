@@ -102,7 +102,11 @@ namespace AccessoriesStore.Api
                 app.UseSwaggerUI();
             }
 
-            app.UseHttpsRedirection();
+            if (!app.Environment.IsEnvironment("Testing"))
+            {
+                app.UseHttpsRedirection();
+            }
+
             app.UseStaticFiles();
             app.UseCors("AllowFrontend");
             app.UseAuthentication();
