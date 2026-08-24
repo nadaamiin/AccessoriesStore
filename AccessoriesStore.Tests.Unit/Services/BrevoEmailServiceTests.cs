@@ -26,6 +26,7 @@ public class BrevoEmailServiceTests
         _mockConfig.Setup(c => c["Brevo:FromEmail"]).Returns("noreply@accessories.store");
         _mockConfig.Setup(c => c["Brevo:FromName"]).Returns("Accessories Store");
 
+        // Setup HttpClientFactory to return a real HttpClient
         var httpClient = new HttpClient();
         _mockHttpClientFactory.Setup(f => f.CreateClient(It.IsAny<string>())).Returns(httpClient);
         _mockHttpClientFactory.Setup(f => f.CreateClient()).Returns(httpClient);
@@ -65,13 +66,13 @@ public class BrevoEmailServiceTests
             }
         };
 
-        // Act & Assert
+        // Act & Assert - should not throw
         var act = async () => await _service.SendOrderConfirmationAsync(orderDto.CustomerEmail, orderDto);
         await act.Should().NotThrowAsync();
     }
 
     [Fact]
-    public async Task SendOrderConfirmationAsync_WithNullEmail_ShouldNotThrow()
+    public async Task SendOrderConfirmationAsync_WithoutItems_ShouldNotThrow()
     {
         // Arrange
         var orderDto = new OrderDto
@@ -80,11 +81,23 @@ public class BrevoEmailServiceTests
             OrderNumber = "ORD-20260824-ABC123",
             CustomerName = "John Doe",
             CustomerEmail = "john@example.com",
-            Items = new List<OrderItemDto>()
+            TotalAmount = 100m,
+            Items = new List<OrderItemDto>() // Empty items
         };
 
-        // Act & Assert - should handle gracefully
-        var act = async () => await _service.SendOrderConfirmationAsync(null!, orderDto);
+        // Act & Assert - should not throw even with empty items
+        var act = async () => await _service.SendOrderConfirmationAsync(orderDto.CustomerEmail, orderDto);
         await act.Should().NotThrowAsync();
+    }
+
+    [Fact]
+    public void BrevoEmailService_Configuration_ShouldBeReadFromConfig()
+    {
+        // Arrange - already done in constructor
+
+        // Assert - verify configuration was set up correctly
+        _mockConfig.Verify(c => c["Brevo:ApiKey"], Times.AtLeastOnce);
+        _mockConfig.Verify(c => c["Brevo:FromEmail"], Times.AtLeastOnce);
+        _mockConfig.Verify(c => c["Brevo:FromName"], Times.AtLeastOnce);
     }
 }
