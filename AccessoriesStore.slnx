@@ -1,4 +1,6 @@
 <Solution>
   <Project Path="AccessoriesStore.Api/AccessoriesStore.Api.csproj" />
   <Project Path="AccessoriesStore.Domain/AccessoriesStore.Domain.csproj" />
+  <Project Path="AccessoriesStore.Tests.Unit/AccessoriesStore.Tests.Unit.csproj" />
+  <Project Path="AccessoriesStore.Tests.Integration/AccessoriesStore.Tests.Integration.csproj" />
 </Solution>
