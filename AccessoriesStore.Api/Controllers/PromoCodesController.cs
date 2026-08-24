@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AccessoriesStore.Api.Data;
 using AccessoriesStore.Api.DTOs;
+using AccessoriesStore.Api.Services;
 using AccessoriesStore.Domain.Entities;
 
 namespace AccessoriesStore.Api.Controllers;
@@ -12,14 +13,14 @@ namespace AccessoriesStore.Api.Controllers;
 public class PromoCodesController : ControllerBase
 {
     private readonly AppDbContext _context;
+    private readonly IPromoCodeService _promoCodeService;
 
-    public PromoCodesController(AppDbContext context)
+    public PromoCodesController(AppDbContext context, IPromoCodeService promoCodeService)
     {
         _context = context;
+        _promoCodeService = promoCodeService;
     }
 
-    [Authorize]
-    [HttpGet]
     [Authorize]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<PromoCodeDto>>> GetAll()
@@ -104,33 +105,7 @@ public class PromoCodesController : ControllerBase
     [HttpPost("validate")]
     public async Task<ActionResult<ValidatePromoCodeResultDto>> Validate(ValidatePromoCodeDto dto)
     {
-        var result = await ValidateInternal(dto.Code, dto.Subtotal);
+        var result = await _promoCodeService.ValidateAsync(dto.Code, dto.Subtotal);
         return Ok(result);
-    }
-
-    internal async Task<ValidatePromoCodeResultDto> ValidateInternal(string? codeInput, decimal subtotal)
-    {
-        if (string.IsNullOrWhiteSpace(codeInput))
-            return new ValidatePromoCodeResultDto { Valid = false, DiscountAmount = 0, Message = "Enter a code." };
-
-        var code = await _context.PromoCodes
-            .FirstOrDefaultAsync(p => p.Code == codeInput.Trim().ToUpper());
-
-        if (code == null || !code.IsActive)
-            return new ValidatePromoCodeResultDto { Valid = false, DiscountAmount = 0, Message = "Invalid promo code." };
-
-        if (code.ExpiresAt.HasValue && code.ExpiresAt.Value < DateTime.UtcNow)
-            return new ValidatePromoCodeResultDto { Valid = false, DiscountAmount = 0, Message = "This code has expired." };
-
-        var discount = code.IsPercentage
-            ? Math.Round(subtotal * (code.DiscountValue / 100m), 2)
-            : Math.Min(code.DiscountValue, subtotal);
-
-        return new ValidatePromoCodeResultDto
-        {
-            Valid = true,
-            DiscountAmount = discount,
-            Message = code.IsPercentage ? $"{code.DiscountValue}% off applied!" : $"LE {code.DiscountValue} off applied!"
-        };
     }
 }
