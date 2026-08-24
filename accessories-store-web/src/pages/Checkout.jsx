@@ -102,10 +102,10 @@ function Checkout() {
         setPromoSuccess(true);
         setPromoMessage(res.data.message);
       } else {
-        setDiscountAmount(0);
-        setAppliedCode(null);
-        setPromoSuccess(false);
-        setPromoMessage(res.data.message);
+        setDiscountAmount(0);  
+        setAppliedCode(null);  
+        setPromoSuccess(false);  
+        setPromoMessage("Enter a valid discount code"); 
       }
     } catch {
       setPromoSuccess(false);
@@ -167,124 +167,131 @@ function Checkout() {
     }
   };
 
-  if (items.length === 0) {
-  return (
-    <div className="min-h-screen bg-blush-50">
-      <CheckoutHeader />
-      <CartDrawer />
-      <div className="max-w-3xl mx-auto px-6 py-20 text-center">
-        <p className="text-muted">Your bag is empty — add something before checking out.</p>
-      </div>
-    </div>
-  );
-  }
-
-  const summaryProps = {
-  items, itemCount, subtotal, discountAmount,
-  shippingFee, originalShippingFee, freeShippingApplied,
-  total, totalSavings, totalBeforeSavings,
-  promoInput, setPromoInput, onApplyPromo: handleApplyPromo,
-  promoLoading, promoMessage, promoSuccess,
-  };
-
-  return (
-    <div className="min-h-screen bg-blush-50">
-      <CheckoutHeader />
-      <CartDrawer />
-
-      <div className="max-w-6xl mx-auto px-6 py-8">
-        <MobileOrderSummary {...summaryProps} />
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Left: form */}
-          <form onSubmit={handleSubmit} noValidate>
-            <h2 className="font-body text-lg font-bold text-espresso mb-3">Contact</h2>
-            <Field label="Email" name="email" type="email" value={form.email} onChange={handleChange} error={errors.email} />
-
-            <h2 className="font-body text-lg font-bold text-espresso mt-8 mb-3">Delivery</h2>
-            <div className="space-y-3">
-              <div className="bg-blush-100 rounded-lg px-4 py-3">
-                <p className="text-xs text-muted">Country/Region</p>
-                <p className="text-espresso">Egypt</p>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <Field label="First name" name="firstName" value={form.firstName} onChange={handleChange} error={errors.firstName} />
-                <Field label="Last name" name="lastName" value={form.lastName} onChange={handleChange} error={errors.lastName} />
-              </div>
-
-              <Field label="Address" name="address" value={form.address} onChange={handleChange} error={errors.address} />
-
-              <div className="grid grid-cols-2 gap-3">
-                <Field label="City" name="city" value={form.city} onChange={handleChange} error={errors.city} />
-                <Field label="Postal code (optional)" name="postalCode" value={form.postalCode} onChange={handleChange} />
-              </div>
-
-              <div>
-                <label className="block text-xs font-medium tracking-wide uppercase text-muted mb-1.5">Governorate</label>
-                <select
-                  name="governorate"
-                  value={form.governorate}
-                  onChange={handleChange}
-                  className="w-full bg-white border border-line rounded-lg px-4 py-3 text-espresso focus:outline-none focus:border-rose-300 transition"
-                >
-                  {GOVERNORATES.map((g) => (
-                    <option key={g} value={g}>{g}</option>
-                  ))}
-                </select>
-              </div>
-
-              <Field label="Phone" name="phone" type="tel" value={form.phone} onChange={handleChange} error={errors.phone} />
-
-              <label className="flex items-center gap-2 text-sm text-espresso pt-1">
-                <input type="checkbox" name="saveInfo" checked={form.saveInfo} onChange={handleChange} />
-                Save this information for next time
-              </label>
-            </div>
-
-            <h2 className="font-body text-lg font-bold text-espresso mt-8 mb-3">Shipping</h2>
-            <div className="bg-blush-100 border border-line rounded-lg px-4 py-4 flex items-center justify-between">
-              <span className="text-sm font-medium text-espresso">Standard Delivery</span>
-              {freeShippingApplied ? (
-                <span className="text-sage text-sm font-semibold">FREE</span>
-              ) : (
-                <span className="text-espresso text-sm font-semibold">LE {shippingFee.toFixed(2)}</span>
-              )}
-            </div>
-
-            <h2 className="font-body text-lg font-bold text-espresso mt-8 mb-3">Payment</h2>
-            <p className="text-xs text-muted mb-3">All orders are fulfilled with cash on delivery.</p>
-            <div className="bg-blush-100 border border-line rounded-lg px-4 py-4 flex items-center gap-3">
-              <span className="w-4 h-4 rounded-full border-2 border-espresso flex items-center justify-center shrink-0">
-                <span className="w-2 h-2 rounded-full bg-espresso" />
-              </span>
-              <span className="text-sm font-medium text-espresso">Cash on Delivery (COD)</span>
-            </div>
-
-            <MobilePromoAndTotals {...summaryProps} />
-
-            {error && (
-              <p className="text-brick text-sm mt-4">{typeof error === "string" ? error : "Please check your details and try again."}</p>
-            )}
-
-            <button
-              type="submit"
-              disabled={submitting}
-              className="w-full mt-4 py-4 rounded-full bg-espresso text-white text-sm font-semibold tracking-wide uppercase hover:opacity-90 transition disabled:opacity-50"
-            >
-              {submitting ? "Placing Order..." : "Place Order"}
-            </button>
-          </form>
-
-          {/* Right: desktop order summary */}
-          <div className="hidden lg:block">
-            <div className="bg-blush-100 rounded-2xl p-6 sticky top-8">
-              <OrderSummaryPanel {...summaryProps} />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+  if (items.length === 0) {  
+  return (  
+    <div className="min-h-screen bg-blush-50">  
+      <CheckoutHeader />  
+      <CartDrawer />  
+      <div className="max-w-3xl mx-auto px-6 py-20 text-center">  
+        <p className="text-muted">Your bag is empty — add something before checking out.</p>  
+      </div>  
+    </div>  
+  );  
+  }  
+  
+  const summaryProps = {  
+  items, itemCount, subtotal, discountAmount,  
+  shippingFee, originalShippingFee, freeShippingApplied,  
+  total, totalSavings, totalBeforeSavings,  
+  promoInput, setPromoInput, onApplyPromo: handleApplyPromo,  
+  promoLoading, promoMessage, promoSuccess,  
+  setPromoMessage, setPromoSuccess,  
+  };  
+  
+  return (  
+    <div className="min-h-screen bg-blush-50">  
+      <CheckoutHeader />  
+      <CartDrawer />  
+  
+      {/* Mobile order summary stays stacked on top */}  
+      <div className="lg:hidden max-w-6xl mx-auto px-6 py-8">  
+        <MobileOrderSummary {...summaryProps} />  
+      </div>  
+  
+      {/* Desktop split — each half fills its side of the screen */}  
+      <div className="lg:grid lg:grid-cols-2 lg:min-h-screen">  
+        {/* Left half: form on page background */}  
+        <div className="bg-blush-50 lg:flex lg:justify-end">  
+          <div className="w-full lg:max-w-xl px-6 py-8 lg:pr-12">  
+            <form onSubmit={handleSubmit} noValidate>  
+              <h2 className="font-body text-lg font-bold text-espresso mb-3">Contact</h2>  
+              <Field label="Email" name="email" type="email" value={form.email} onChange={handleChange} error={errors.email} />  
+  
+              <h2 className="font-body text-lg font-bold text-espresso mt-8 mb-3">Delivery</h2>  
+              <div className="space-y-3">  
+                <div className="bg-blush-100 rounded-lg px-4 py-3">  
+                  <p className="text-xs text-muted">Country/Region</p>  
+                  <p className="text-espresso">Egypt</p>  
+                </div>  
+  
+                <div className="grid grid-cols-2 gap-3">  
+                  <Field label="First name" name="firstName" value={form.firstName} onChange={handleChange} error={errors.firstName} />  
+                  <Field label="Last name" name="lastName" value={form.lastName} onChange={handleChange} error={errors.lastName} />  
+                </div>  
+  
+                <Field label="Address" name="address" value={form.address} onChange={handleChange} error={errors.address} />  
+  
+                <div className="grid grid-cols-2 gap-3">  
+                  <Field label="City" name="city" value={form.city} onChange={handleChange} error={errors.city} />  
+                  <Field label="Postal code (optional)" name="postalCode" value={form.postalCode} onChange={handleChange} />  
+                </div>  
+  
+                <div>  
+                  <label className="block text-xs font-medium tracking-wide uppercase text-muted mb-1.5">Governorate</label>  
+                  <select  
+                    name="governorate"  
+                    value={form.governorate}  
+                    onChange={handleChange}  
+                    className="w-full bg-white border border-line rounded-lg px-4 py-3 text-espresso focus:outline-none focus:border-rose-300 transition"  
+                  >  
+                    {GOVERNORATES.map((g) => (  
+                      <option key={g} value={g}>{g}</option>  
+                    ))}  
+                  </select>  
+                </div>  
+  
+                <Field label="Phone" name="phone" type="tel" value={form.phone} onChange={handleChange} error={errors.phone} />  
+  
+                <label className="flex items-center gap-2 text-sm text-espresso pt-1">  
+                  <input type="checkbox" name="saveInfo" checked={form.saveInfo} onChange={handleChange} />  
+                  Save this information for next time  
+                </label>  
+              </div>  
+  
+              <h2 className="font-body text-lg font-bold text-espresso mt-8 mb-3">Shipping</h2>  
+              <div className="bg-blush-100 border border-line rounded-lg px-4 py-4 flex items-center justify-between">  
+                <span className="text-sm font-medium text-espresso">Standard Delivery</span>  
+                {freeShippingApplied ? (  
+                  <span className="text-sage text-sm font-semibold">FREE</span>  
+                ) : (  
+                  <span className="text-espresso text-sm font-semibold">LE {shippingFee.toFixed(2)}</span>  
+                )}  
+              </div>  
+  
+              <h2 className="font-body text-lg font-bold text-espresso mt-8 mb-3">Payment</h2>  
+              <p className="text-xs text-muted mb-3">All orders are fulfilled with cash on delivery.</p>  
+              <div className="bg-blush-100 border border-line rounded-lg px-4 py-4 flex items-center gap-3">  
+                <span className="w-4 h-4 rounded-full border-2 border-espresso flex items-center justify-center shrink-0">  
+                  <span className="w-2 h-2 rounded-full bg-espresso" />  
+                </span>  
+                <span className="text-sm font-medium text-espresso">Cash on Delivery (COD)</span>  
+              </div>  
+  
+              <MobilePromoAndTotals {...summaryProps} />  
+  
+              {error && (  
+                <p className="text-brick text-sm mt-4">{typeof error === "string" ? error : "Please check your details and try again."}</p>  
+              )}  
+  
+              <button  
+                type="submit"  
+                disabled={submitting}  
+                className="w-full mt-4 py-4 rounded-full bg-espresso text-white text-sm font-semibold tracking-wide uppercase hover:opacity-90 transition disabled:opacity-50"  
+              >  
+                {submitting ? "Placing Order..." : "Place Order"}  
+              </button>  
+            </form>  
+          </div>  
+        </div>  
+  
+        {/* Right half: order summary on distinct background, bleeds to edge */}  
+        <div className="hidden lg:block bg-blush-100 border-l border-line">  
+          <div className="w-full lg:max-w-xl px-6 py-8 lg:pl-12 sticky top-8">  
+            <OrderSummaryPanel {...summaryProps} />  
+          </div>  
+        </div>  
+      </div>  
+    </div>  
   );
 }
 

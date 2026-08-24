@@ -2,7 +2,8 @@ function OrderSummaryDetails({
   items, itemCount, subtotal, discountAmount,
   shippingFee, originalShippingFee, freeShippingApplied,
   total, totalSavings,
-  promoInput, setPromoInput, onApplyPromo, promoLoading, promoMessage, promoSuccess,
+  promoInput, setPromoInput, onApplyPromo, promoLoading, promoMessage, promoSuccess,  
+  setPromoMessage, setPromoSuccess,
 }) {
   return (
     <div className="space-y-4">
@@ -31,11 +32,19 @@ function OrderSummaryDetails({
       ))}
 
       <div className="flex gap-2 pt-1">
-        <input
-          value={promoInput}
-          onChange={(e) => setPromoInput(e.target.value)}
-          placeholder="Discount code or gift card"
-          className="flex-1 bg-white border border-line rounded-full px-4 py-2.5 text-sm text-espresso placeholder:text-muted/60 focus:outline-none focus:border-espresso transition"
+         <input
+          value={promoInput}  
+          onChange={(e) => {  
+            setPromoInput(e.target.value);  
+            if (promoMessage) setPromoMessage("");  
+            if (promoSuccess) setPromoSuccess(false);  
+          }}  
+          placeholder="Discount code or gift card"  
+          className={`flex-1 bg-white border rounded-full px-4 py-2.5 text-sm text-espresso placeholder:text-muted/60 focus:outline-none transition ${  
+            promoMessage && !promoSuccess  
+              ? "border-brick"  
+              : "border-line focus:border-espresso"  
+          }`}  
         />
         <button
           type="button"

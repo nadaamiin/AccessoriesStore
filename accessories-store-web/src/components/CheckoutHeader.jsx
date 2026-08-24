@@ -1,15 +1,13 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useUI } from "../context/UIContext";
 import logo from "../assets/logo.png";
 import bgImage from "../assets/bg.png";
 
 function CheckoutHeader() {
   const { openCart } = useUI();
-  const navigate = useNavigate();
 
-  const handleCartClick = () => {
-    navigate("/products");
-    openCart();
+  const handleCartClick = () => {  
+    openCart();  
   };
 
   return (
