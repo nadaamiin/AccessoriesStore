@@ -14,13 +14,13 @@ public class OrdersController : ControllerBase
 {
     private readonly AppDbContext _context;
     private readonly IEmailService _emailService;
-    private readonly PromoCodesController _promoCodesController;
+    private readonly IPromoCodeService _promoCodeService;
 
-    public OrdersController(AppDbContext context, IEmailService emailService, PromoCodesController promoCodesController)
+    public OrdersController(AppDbContext context, IEmailService emailService, IPromoCodeService promoCodeService)
     {
         _context = context;
         _emailService = emailService;
-        _promoCodesController = promoCodesController;
+        _promoCodeService = promoCodeService;
     }
 
     // POST: api/orders
@@ -91,7 +91,7 @@ public class OrdersController : ControllerBase
         decimal discountAmount = 0;
         if (!string.IsNullOrWhiteSpace(dto.PromoCode))
         {
-            var promoResult = await _promoCodesController.ValidateInternal(dto.PromoCode, total);
+            var promoResult = await _promoCodeService.ValidateAsync(dto.PromoCode, total);
             if (promoResult.Valid)
             {
                 discountAmount = promoResult.DiscountAmount;

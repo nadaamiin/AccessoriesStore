@@ -51,6 +51,8 @@ namespace AccessoriesStore.Api
             builder.Services.AddHttpClient();
             builder.Services.AddScoped<IEmailService, BrevoEmailService>();
 
+            builder.Services.AddScoped<IPromoCodeService, PromoCodeService>();
+
             // Identity
             builder.Services.AddIdentityCore<AdminUser>(options =>
             {
