@@ -131,6 +131,8 @@ public class ProductsController : ControllerBase
             Material = dto.Material,
             Dimensions = dto.Dimensions,
             Price = dto.Price,
+            SalePrice = dto.IsOnSale ? dto.SalePrice : null,
+            IsOnSale = dto.IsOnSale,
             StockQuantity = dto.StockQuantity,
             CategoryId = dto.CategoryId
         };
@@ -146,6 +148,8 @@ public class ProductsController : ControllerBase
             Material = product.Material,
             Dimensions = product.Dimensions,
             Price = product.Price,
+            SalePrice = product.SalePrice,
+            IsOnSale = product.IsOnSale,
             StockQuantity = product.StockQuantity,
             ImageUrl = product.ImageUrl,
             ImageUrls = new List<string>(),
