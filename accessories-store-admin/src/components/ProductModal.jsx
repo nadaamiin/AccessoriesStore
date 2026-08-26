@@ -121,56 +121,48 @@ function ProductModal({ product, categories, onClose, onSave }) {
             </div>
           </div>
 
-          {/* Additional photos gallery — only relevant once the product exists */}
-          {product && (
-            <div>
-              <label className={labelClass}>Additional Photos</label>
-              <div className="flex flex-wrap gap-3">
-                {existingImages.map((img) => (
-                  <div key={img.id} className="relative w-16 h-16">
-                    <img
-                      src={`https://localhost:7113${img.url}`}
-                      alt=""
-                      className="w-16 h-16 object-cover rounded-md border border-nude-200"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => removeExistingImage(img.id)}
-                      className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-brick text-white text-xs flex items-center justify-center"
-                      aria-label="Remove image"
-                    >
-                      ×
-                    </button>
-                  </div>
-                ))}
+          {/* Additional photos gallery — now available for both create and edit */}
+          <div>
+            <label className={labelClass}>Additional Photos</label>
+            <div className="flex flex-wrap gap-3">
+              {existingImages.map((img) => (
+                <div key={img.id} className="relative w-16 h-16">
+                  <img
+                    src={`https://localhost:7113${img.url}`}
+                    alt=""
+                    className="w-16 h-16 object-cover rounded-md border border-nude-200"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removeExistingImage(img.id)}
+                    className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-brick text-white text-xs flex items-center justify-center"
+                    aria-label="Remove image"
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
 
-                {newGalleryPreviews.map((src, i) => (
-                  <div key={i} className="relative w-16 h-16">
-                    <img src={src} alt="" className="w-16 h-16 object-cover rounded-md border border-nude-300" />
-                    <button
-                      type="button"
-                      onClick={() => removeNewGalleryFile(i)}
-                      className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-brick text-white text-xs flex items-center justify-center"
-                      aria-label="Remove image"
-                    >
-                      ×
-                    </button>
-                  </div>
-                ))}
+              {newGalleryPreviews.map((src, i) => (
+                <div key={i} className="relative w-16 h-16">
+                  <img src={src} alt="" className="w-16 h-16 object-cover rounded-md border border-nude-300" />
+                  <button
+                    type="button"
+                    onClick={() => removeNewGalleryFile(i)}
+                    className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-brick text-white text-xs flex items-center justify-center"
+                    aria-label="Remove image"
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
 
-                <label className="w-16 h-16 rounded-md border border-dashed border-nude-300 flex items-center justify-center text-muted text-xs bg-white cursor-pointer hover:bg-nude-100 transition">
-                  + Add
-                  <input type="file" accept="image/*" multiple onChange={handleGalleryFilesChange} className="hidden" />
-                </label>
-              </div>
+              <label className="w-16 h-16 rounded-md border border-dashed border-nude-300 flex items-center justify-center text-muted text-xs bg-white cursor-pointer hover:bg-nude-100 transition">
+                + Add
+                <input type="file" accept="image/*" multiple onChange={handleGalleryFilesChange} className="hidden" />
+              </label>
             </div>
-          )}
-
-          {!product && (
-            <p className="text-xs text-muted">
-              Save this product first to add additional photos.
-            </p>
-          )}
+          </div>
 
           <div>
             <label className={labelClass}>Name</label>
