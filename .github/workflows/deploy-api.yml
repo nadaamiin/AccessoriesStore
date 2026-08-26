@@ -34,9 +34,13 @@ jobs:
           $json | ConvertTo-Json -Depth 10 | Set-Content $configPath
 
       - name: Deploy via Web Deploy
+        shell: pwsh
         run: |
-          & "C:\Program Files\IIS\Microsoft Web Deploy V3\msdeploy.exe" `
-            -verb:sync `
-            -source:contentPath="./publish" `
-            -dest:contentPath="${{ secrets.WEBSITE_NAME }}",computerName="https://${{ secrets.SERVER_COMPUTER_NAME }}:8172/msdeploy.axd?site=${{ secrets.WEBSITE_NAME }}",username="${{ secrets.SERVER_USERNAME }}",password="${{ secrets.SERVER_PASSWORD }}",authtype="Basic",includeAcls="False" `
-            -allowUntrusted
+          $site = "${{ secrets.WEBSITE_NAME }}"
+          $computerName = "${{ secrets.SERVER_COMPUTER_NAME }}"
+          $user = "${{ secrets.SERVER_USERNAME }}"
+          $pass = "${{ secrets.SERVER_PASSWORD }}"
+
+          $destArg = "-dest:contentPath=$site,computerName=https://${computerName}:8172/msdeploy.axd?site=$site,username=$user,password=$pass,authtype=Basic,includeAcls=False"
+
+          & "C:\Program Files\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb:sync -source:contentPath="./publish" $destArg -allowUntrusted
