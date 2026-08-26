@@ -62,7 +62,7 @@ function ReviewForm({ productId, onSubmitted }) {
   if (done) {
     return (
       <div className="bg-blush-100 rounded-xl p-6 text-center text-espresso">
-        Thank you! Your review has been submitted and will appear once approved.
+        Thank you! Your review has been submitted.
       </div>
     );
   }
@@ -82,7 +82,7 @@ function ReviewForm({ productId, onSubmitted }) {
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
-          className="w-full bg-white border border-nudepink-200 rounded-md px-3.5 py-2.5 text-espresso focus:outline-none focus:ring-2 focus:ring-rose-400"
+          className="w-full bg-white border border-nudepink-200 rounded-md px-3.5 py-2.5 text-espresso focus:outline-none focus:ring-1"
         />
       </div>
 
@@ -93,7 +93,7 @@ function ReviewForm({ productId, onSubmitted }) {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          className="w-full bg-white border border-nudepink-200 rounded-md px-3.5 py-2.5 text-espresso focus:outline-none focus:ring-2 focus:ring-rose-400"
+          className="w-full bg-white border border-nudepink-200 rounded-md px-3.5 py-2.5 text-espresso focus:outline-none focus:ring-1"
         />
       </div>
 
@@ -104,20 +104,68 @@ function ReviewForm({ productId, onSubmitted }) {
           onChange={(e) => setComment(e.target.value)}
           rows={4}
           required
-          className="w-full bg-white border border-nudepink-200 rounded-md px-3.5 py-2.5 text-espresso focus:outline-none focus:ring-2 focus:ring-rose-400"
+          className="w-full bg-white border border-nudepink-200 rounded-md px-3.5 py-2.5 text-espresso focus:outline-none focus:ring-1"
         />
       </div>
 
       <div>
-        <label className="block text-xs font-medium tracking-wide uppercase text-muted mb-1.5">
-          Photo (optional)
+        <label className="block text-xs font-medium tracking-wide uppercase text-muted mb-2">
+          Photo <span className="normal-case">(optional)</span>
         </label>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={(e) => setImage(e.target.files[0] || null)}
-          className="text-sm text-muted"
-        />
+
+        <div className="flex items-center gap-3">
+          <label className="flex items-center gap-3 w-full cursor-pointer rounded-lg bg-[#FDFBF9] px-4 py-3 transition hover:bg-[#F8F3EE]">
+            
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#F2EDE5] text-[#A9855C]">
+              <svg
+                width="19"
+                height="19"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+              >
+                <rect x="3" y="5" width="18" height="16" rx="2" />
+                <circle cx="12" cy="13" r="3" />
+                <path d="M8 5l1.5-2h5L16 5" />
+              </svg>
+            </div>
+
+            <div className="flex flex-col min-w-0">
+              <span className="text-sm font-medium text-espresso truncate">
+                {image ? image.name : "Add a photo"}
+              </span>
+
+              {!image && (
+                <span className="text-xs text-muted">
+                  Share your experience
+                </span>
+              )}
+            </div>
+
+            <span className="ml-auto shrink-0 text-xs text-[#A9855C]">
+              Browse
+            </span>
+
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => setImage(e.target.files[0] || null)}
+              className="hidden"
+            />
+          </label>
+
+          {image && (
+            <button
+              type="button"
+              onClick={() => setImage(null)}
+              aria-label="Remove photo"
+              className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#F2EDE5] text-muted hover:bg-[#E8DDD4] hover:text-espresso transition"
+            >
+              ×
+            </button>
+          )}
+        </div>
       </div>
 
       {error && <p className="text-brick text-sm">{error}</p>}
