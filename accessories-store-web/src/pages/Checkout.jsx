@@ -11,10 +11,7 @@ import OrderSummaryPanel from "../components/OrderSummaryPanel";
 import CartDrawer from "../components/CartDrawer";
 
 const GOVERNORATES = [
-  "Cairo", "Giza", "Alexandria", "Qalyubia", "Sharqia", "Dakahlia",
-  "Beheira", "Gharbia", "Monufia", "Fayoum", "Ismailia", "Suez",
-  "Port Said", "Damietta", "Minya", "Assiut", "Sohag", "Qena",
-  "Aswan", "Luxor", "Red Sea", "Beni Suef", "Kafr El Sheikh", "Matrouh",
+  "Cairo", "Giza"
 ];
 
 const SAVED_INFO_KEY = "checkoutInfo";
