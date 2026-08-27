@@ -14,6 +14,24 @@ function Home() {
     getProducts().then((res) => setProducts(res.data.slice(0, 8))).catch(() => {});
   }, []);
 
+  // Trap back-navigation only if the user just completed an order —
+  // prevents landing back on the (now stale) checkout/confirmation pages.
+  useEffect(() => {
+    const justOrdered = sessionStorage.getItem("justOrdered");
+    if (!justOrdered) return;
+
+    sessionStorage.removeItem("justOrdered");
+
+    window.history.pushState(null, "", window.location.href);
+
+    const handlePopState = () => {
+      window.history.pushState(null, "", window.location.href);
+    };
+
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, []);
+
   return (
     <Layout>
       {/* Hero */}

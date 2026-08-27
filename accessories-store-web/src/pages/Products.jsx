@@ -176,19 +176,42 @@ function Products() {
         )}
 
         {/* Filter | Sort bar */}
-        <div className="grid grid-cols-2 gap-3 mb-8">
+        <div className="flex w-full mb-8 border-y border-line bg-white">
+          
+          {/* Filter */}
           <button
             onClick={openDrawer}
-            className="flex items-center justify-center gap-2 py-3 bg-blush-100 text-xs font-semibold tracking-wide uppercase text-espresso hover:bg-nav hover:opacity-80 transition"
+            className="flex-1 flex items-center justify-between px-4 py-3 text-xs font-semibold tracking-wide uppercase text-espresso hover:bg-blush-50 transition"
           >
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M4 6h16M7 12h10M10 18h4" strokeLinecap="round" />
+            <div className="flex items-center gap-2">
+              <span>Filter</span>
+
+              {hasActiveFilters && (
+                <span className="w-1.5 h-1.5 rounded-full bg-rose-500" />
+              )}
+            </div>
+
+            <svg 
+              width="15"
+              height="15"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2">
+            <path
+              d="M4 6h16M7 12h10M10 18h4" 
+              strokeLinecap="round" />
             </svg>
-            Filter
-            {hasActiveFilters && <span className="w-1.5 h-1.5 rounded-full bg-rose-500" />}
           </button>
 
-          <SortDropdown value={sort} onChange={setSort} />
+          {/* Divider */}
+          <div className="w-px bg-line" />
+
+          {/* Sort */}
+          <div className="flex-1">
+            <SortDropdown value={sort} onChange={setSort} />
+          </div>
+
         </div>
 
         {loading ? (

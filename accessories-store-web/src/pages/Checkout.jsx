@@ -172,6 +172,7 @@ function Checkout() {
       }
 
       clearCart();
+      sessionStorage.setItem("justOrdered", "1");
       navigate("/", { replace: true });
       navigate("/order-confirmation", { state: { order: res.data } });
     } catch (err) {

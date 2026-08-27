@@ -19,25 +19,35 @@ function Navbar() {
   const { openCart, openFavorites } = useUI();
   const { searchQuery, setSearchQuery, shouldFocusSearch, setShouldFocusSearch } = useSearch();  
   const navigate = useNavigate();  
-  const location = useLocation();  
-  const searchInputRef = useRef(null);  
+  const location = useLocation();
   
-  const handleSearchChange = (value) => {  
-    setSearchQuery(value);  
-    if (location.pathname !== "/products") {  
-      setShouldFocusSearch(true);  
-      navigate("/products");  
-    }  
-  };  
+  const desktopSearchInputRef = useRef(null);
+  const mobileSearchInputRef = useRef(null);
   
-  useEffect(() => {  
-    if (location.pathname === "/products" && shouldFocusSearch && searchInputRef.current) {  
-      const input = searchInputRef.current;  
-      input.focus();  
-      const len = input.value.length;  
-      input.setSelectionRange(len, len);  
-      setShouldFocusSearch(false);  
-    }  
+  const handleSearchChange = (value) => {
+    setSearchQuery(value);
+
+    if (location.pathname !== "/products") {
+      setShouldFocusSearch(true);
+      setMobileSearchOpen(true);
+      navigate("/products");
+    }
+  };
+  
+  useEffect(() => {
+    if (location.pathname === "/products" && shouldFocusSearch) {
+      const input =
+        mobileSearchInputRef.current || desktopSearchInputRef.current;
+
+      if (input) {
+        input.focus();
+
+        const len = input.value.length;
+        input.setSelectionRange(len, len);
+
+        setShouldFocusSearch(false);
+      }
+    }
   }, [location.pathname, shouldFocusSearch, setShouldFocusSearch]);
 
   return (
@@ -89,7 +99,7 @@ function Navbar() {
                 <path d="m21 21-4.3-4.3" strokeLinecap="round" />
               </svg>
               <input
-                ref={searchInputRef}
+                ref={desktopSearchInputRef}
                 value={searchQuery}
                 onChange={(e) => handleSearchChange(e.target.value)}
                 placeholder="Search…"
@@ -139,6 +149,7 @@ function Navbar() {
                 <path d="m21 21-4.3-4.3" strokeLinecap="round" />
               </svg>
               <input
+                ref={mobileSearchInputRef}
                 value={searchQuery}
                 onChange={(e) => handleSearchChange(e.target.value)}
                 placeholder="Search products…"
