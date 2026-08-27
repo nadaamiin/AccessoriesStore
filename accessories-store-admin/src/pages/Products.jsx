@@ -128,7 +128,7 @@ function Products() {
           <div key={p.id} className="bg-white border border-nude-200 rounded-lg p-4 flex gap-3">
             {p.imageUrl ? (
               <img
-                src={`https://localhost:7113${p.imageUrl}`}
+                src={`${import.meta.env.VITE_API_URL}${p.imageUrl}`}
                 alt={p.name}
                 className="w-16 h-16 object-cover rounded-md border border-nude-200 shrink-0"
               />
@@ -199,7 +199,7 @@ function Products() {
                 <td className="px-5 py-3">
                   {p.imageUrl ? (
                     <img
-                      src={`https://localhost:7113${p.imageUrl}`}
+                      src={`${import.meta.env.VITE_API_URL}${p.imageUrl}`}
                       alt={p.name}
                       className="w-11 h-11 object-cover rounded-md border border-nude-200"
                     />

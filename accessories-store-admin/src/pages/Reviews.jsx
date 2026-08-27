@@ -73,7 +73,7 @@ function Reviews() {
     <div className="bg-white border border-nude-200 rounded-lg p-4 flex gap-4">
       {r.imageUrl && (
         <img
-          src={`https://localhost:7113${r.imageUrl}`}
+          src={`${import.meta.env.VITE_API_URL}${r.imageUrl}`}
           alt=""
           className="w-16 h-16 object-cover rounded-md border border-nude-200 shrink-0"
         />

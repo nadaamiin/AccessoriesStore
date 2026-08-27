@@ -37,7 +37,7 @@ function ProductModal({ product, categories, onClose, onSave }) {
       salePrice: product.salePrice || "",
       });
       if (product.imageUrl) {
-        setImagePreview(`https://localhost:7113${product.imageUrl}`);
+        setImagePreview(`${import.meta.env.VITE_API_URL}${product.imageUrl}`);
       }
       // product.imageUrls is a list of plain URL strings from the API —
       // we don't have per-image ids from that shape, so this modal expects
@@ -128,7 +128,7 @@ function ProductModal({ product, categories, onClose, onSave }) {
               {existingImages.map((img) => (
                 <div key={img.id} className="relative w-16 h-16">
                   <img
-                    src={`https://localhost:7113${img.url}`}
+                    src={`${import.meta.env.VITE_API_URL}${img.imageUrl}`}
                     alt=""
                     className="w-16 h-16 object-cover rounded-md border border-nude-200"
                   />
