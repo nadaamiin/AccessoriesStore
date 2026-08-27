@@ -88,7 +88,11 @@ namespace AccessoriesStore.Api
             {
                 options.AddPolicy("AllowFrontend", policy =>
                 {
-                    policy.WithOrigins("http://localhost:5173", "http://localhost:5174")
+                    policy.WithOrigins(
+                            "http://localhost:5173",
+                            "http://localhost:5174",
+                            "https://accessories-store-beta.vercel.app"
+                          )
                           .AllowAnyHeader()
                           .AllowAnyMethod();
                 });
