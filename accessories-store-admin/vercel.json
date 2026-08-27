@@ -1,44 +1,18 @@
 {
-  "rewrites": [
+  "version": 2,
+  "builds": [
     {
-      "source": "/login",
-      "destination": "/"
-    },
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
+    }
+  ],
+  "routes": [
     {
-      "source": "/dashboard",
-      "destination": "/"
-    },
-    {
-      "source": "/products",
-      "destination": "/"
-    },
-    {
-      "source": "/orders",
-      "destination": "/"
-    },
-    {
-      "source": "/categories",
-      "destination": "/"
-    },
-    {
-      "source": "/announcement",
-      "destination": "/"
-    },
-    {
-      "source": "/reviews",
-      "destination": "/"
-    },
-    {
-      "source": "/shipping",
-      "destination": "/"
-    },
-    {
-      "source": "/promo-codes",
-      "destination": "/"
-    },
-    {
-      "source": "/messages",
-      "destination": "/"
+      "src": "/(.*)",
+      "dest": "/index.html"
     }
   ]
 }
