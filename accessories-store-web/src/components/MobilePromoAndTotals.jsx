@@ -27,7 +27,7 @@ function MobilePromoAndTotals(props) {
         >
           {thumb && (
             <img
-              src={`${import.meta.env.VITE_API_URL}${thumb.imageUrl}`}
+              src={`${import.meta.env.VITE_SERVER_URL}${thumb.imageUrl}`}
               alt=""
               className="w-11 h-11 object-cover rounded-lg bg-white shrink-0"
             />

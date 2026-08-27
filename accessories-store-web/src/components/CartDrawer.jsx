@@ -68,7 +68,7 @@ function CartDrawer() {
               {items.map((item) => (
                 <div key={item.productId} className="flex gap-3">
                   <img
-                    src={`${import.meta.env.VITE_API_URL}${item.imageUrl}`}
+                    src={`${import.meta.env.VITE_SERVER_URL}${item.imageUrl}`}
                     alt={item.name}
                     className="w-20 h-20 object-cover rounded-xl bg-blush-100 shrink-0"
                   />

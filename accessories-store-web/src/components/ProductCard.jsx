@@ -52,7 +52,7 @@ function ProductCard({ product }) {
       <div className="relative aspect-[3/4] rounded-2xl overflow-hidden bg-blush-100">
         {images.length > 0 ? (
           <img
-            src={`${import.meta.env.VITE_API_URL}${images[activeIndex]}`}
+            src={`${import.meta.env.VITE_SERVER_URL}${images[activeIndex]}`}
             alt={product.name}
             className="w-full h-full object-cover transition duration-200"
           />
