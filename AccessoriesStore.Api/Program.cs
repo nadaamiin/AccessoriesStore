@@ -91,7 +91,8 @@ namespace AccessoriesStore.Api
                     policy.WithOrigins(
                             "http://localhost:5173",
                             "http://localhost:5174",
-                            "https://accessories-store-beta.vercel.app"
+                            "https://accessories-store-beta.vercel.app",
+                            "https://nara-accessories-admin.vercel.app"
                           )
                           .AllowAnyHeader()
                           .AllowAnyMethod();
