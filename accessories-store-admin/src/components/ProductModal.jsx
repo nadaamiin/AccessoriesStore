@@ -37,11 +37,8 @@ function ProductModal({ product, categories, onClose, onSave }) {
       salePrice: product.salePrice || "",
       });
       if (product.imageUrl) {
-        setImagePreview(`${import.meta.env.VITE_API_URL}${product.imageUrl}`);
+        setImagePreview(`${import.meta.env.VITE_SERVER_URL}${product.imageUrl}`);
       }
-      // product.imageUrls is a list of plain URL strings from the API —
-      // we don't have per-image ids from that shape, so this modal expects
-      // product.images (id + url) if available; fall back gracefully otherwise.
       if (product.images) {
         setExistingImages(product.images);
       }
@@ -121,7 +118,7 @@ function ProductModal({ product, categories, onClose, onSave }) {
             </div>
           </div>
 
-          {/* Additional photos gallery — now available for both create and edit */}
+          {/* Additional photos gallery*/}
           <div>
             <label className={labelClass}>Additional Photos</label>
             <div className="flex flex-wrap gap-3">
