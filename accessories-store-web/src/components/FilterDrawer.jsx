@@ -26,7 +26,7 @@ function FilterDrawer({
       {open && <div className="fixed inset-0 bg-espresso/40 z-40" onClick={onClose} />}
 
       <div
-        className={`fixed inset-y-0 right-0 z-50 w-[75vw] sm:w-full max-w-sm bg-blush-50 shadow-xl transition-transform duration-300 flex flex-col ${
+        className={`fixed inset-y-0 right-0 z-50 w-[85vw] sm:w-full max-w-sm bg-blush-50 shadow-xl transition-transform duration-300 flex flex-col ${
           open ? "translate-x-0" : "translate-x-full"
         }`}
       >

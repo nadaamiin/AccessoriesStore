@@ -181,7 +181,7 @@ function Products() {
           {/* Filter */}
           <button
             onClick={openDrawer}
-            className="flex-1 flex items-center justify-between px-4 py-3 text-[10px] font-bold tracking-wide uppercase text-espresso hover:bg-blush-50 transition"
+            className="flex-1 flex items-center justify-between px-4 py-2 text-[10px] font-bold tracking-wide uppercase text-espresso hover:bg-blush-100 active:bg-blush-200 transition-colors"
           >
             <div className="flex items-center gap-2">
               <span>Filter</span>
@@ -205,10 +205,10 @@ function Products() {
           </button>
 
           {/* Divider */}
-          <div className="w-px bg-line" />
+          <div className="w-px bg-line self-center h-5" />
 
           {/* Sort */}
-          <div className="flex-1">
+          <div className="flex-1 hover:bg-blush-100 transition-colors">
             <SortDropdown value={sort} onChange={setSort} />
           </div>
 
