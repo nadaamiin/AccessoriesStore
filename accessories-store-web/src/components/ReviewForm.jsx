@@ -20,6 +20,12 @@ function StarPicker({ value, onChange }) {
   );
 }
 
+const REQUIRED_MESSAGES = {
+  name: "Enter your name",
+  email: "Enter your email",
+  comment: "Write a review",
+};
+
 function ReviewForm({ productId, onSubmitted }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -29,10 +35,26 @@ function ReviewForm({ productId, onSubmitted }) {
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
   const [error, setError] = useState("");
+  const [attempted, setAttempted] = useState(false);
+
+  const validate = () => {
+    const errs = {};
+    if (!name.trim()) errs.name = REQUIRED_MESSAGES.name;
+    if (!email.trim()) errs.email = REQUIRED_MESSAGES.email;
+    else if (!/^\S+@\S+\.\S+$/.test(email)) errs.email = "Enter a valid email";
+    if (!comment.trim()) errs.comment = REQUIRED_MESSAGES.comment;
+    return errs;
+  };
+
+  const errors = attempted ? validate() : {};
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setAttempted(true);
     setError("");
+
+    const errs = validate();
+    if (Object.keys(errs).length > 0) return;
 
     if (rating === 0) {
       setError("Please select a star rating.");
@@ -67,8 +89,13 @@ function ReviewForm({ productId, onSubmitted }) {
     );
   }
 
+  const inputClass = (hasError) =>
+    `w-full bg-white border rounded-md px-3.5 py-2.5 text-espresso focus:outline-none transition ${
+      hasError ? "border-brick" : "border-nudepink-200 focus:ring-1"
+    }`;
+
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 max-w-md text-left">
+    <form onSubmit={handleSubmit} noValidate className="space-y-4 max-w-md text-left">
       <div>
         <label className="block text-xs font-medium tracking-wide uppercase text-muted mb-1.5">
           Your Rating
@@ -81,9 +108,9 @@ function ReviewForm({ productId, onSubmitted }) {
         <input
           value={name}
           onChange={(e) => setName(e.target.value)}
-          required
-          className="w-full bg-white border border-nudepink-200 rounded-md px-3.5 py-2.5 text-espresso focus:outline-none focus:ring-1"
+          className={inputClass(errors.name)}
         />
+        {errors.name && <p className="text-brick text-xs mt-1.5">{errors.name}</p>}
       </div>
 
       <div>
@@ -92,9 +119,9 @@ function ReviewForm({ productId, onSubmitted }) {
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          required
-          className="w-full bg-white border border-nudepink-200 rounded-md px-3.5 py-2.5 text-espresso focus:outline-none focus:ring-1"
+          className={inputClass(errors.email)}
         />
+        {errors.email && <p className="text-brick text-xs mt-1.5">{errors.email}</p>}
       </div>
 
       <div>
@@ -103,9 +130,9 @@ function ReviewForm({ productId, onSubmitted }) {
           value={comment}
           onChange={(e) => setComment(e.target.value)}
           rows={4}
-          required
-          className="w-full bg-white border border-nudepink-200 rounded-md px-3.5 py-2.5 text-espresso focus:outline-none focus:ring-1"
+          className={inputClass(errors.comment)}
         />
+        {errors.comment && <p className="text-brick text-xs mt-1.5">{errors.comment}</p>}
       </div>
 
       <div>

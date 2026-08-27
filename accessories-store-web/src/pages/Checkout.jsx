@@ -28,6 +28,22 @@ const REQUIRED_MESSAGES = {
   phone: "Enter a phone number",
 };
 
+function parseErrorMessage(rawError) {
+  if (typeof rawError !== "string") {
+    return "Something went wrong placing your order. Please try again.";
+  }
+
+  const stockMatch = rawError.match(/Insufficient stock for '(.+?)'\. Available: (\d+)\./);
+  if (stockMatch) {
+    const [, productName, available] = stockMatch;
+    return available === "0"
+      ? `Sorry, '${productName}' just sold out — please remove it from your bag.`
+      : `Only ${available} of '${productName}' left — please update the quantity in your bag.`;
+  }
+
+  return rawError;
+}
+
 function Field({ label, name, value, onChange, type = "text", error, ...props }) {
   return (
     <div>
@@ -162,7 +178,7 @@ function Checkout() {
       navigate("/", { replace: true });
       navigate("/order-confirmation", { state: { order: res.data } });
     } catch (err) {
-      setError(err.response?.data || "Something went wrong placing your order. Please try again.");
+      setError(parseErrorMessage(err.response?.data));
     } finally {
       setSubmitting(false);
     }
@@ -270,8 +286,15 @@ function Checkout() {
   
               <MobilePromoAndTotals {...summaryProps} />  
   
-              {error && (  
-                <p className="text-brick text-sm mt-4">{typeof error === "string" ? error : "Please check your details and try again."}</p>  
+              {error && (
+                <div className="flex items-start gap-2.5 mt-4 px-4 py-3 rounded-lg bg-brick/10 border border-brick/20">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-brick shrink-0 mt-0.5">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="8" x2="12" y2="12" />
+                    <line x1="12" y1="16" x2="12.01" y2="16" />
+                  </svg>
+                  <p className="text-brick text-sm leading-snug">{error}</p>
+                </div>
               )}  
   
               <button  
