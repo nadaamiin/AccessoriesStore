@@ -86,7 +86,7 @@ function ProductDetail() {
                     i === activeImage ? "border-rose-500" : "border-transparent"
                   }`}
                 >
-                  <img src={`https://localhost:7113${img}`} alt="" className="w-full h-full object-cover" />
+                  <img src={`${import.meta.env.VITE_API_URL}${img}`} alt="" className="w-full h-full object-cover" />
                 </button>
               ))}
             </div>
@@ -94,7 +94,7 @@ function ProductDetail() {
           <div className="relative flex-1 aspect-square rounded-2xl overflow-hidden bg-blush-100">
             {images.length > 0 ? (
               <img
-                src={`https://localhost:7113${images[activeImage]}`}
+                src={`${import.meta.env.VITE_API_URL}${images[activeImage]}`}
                 alt={product.name}
                 className="w-full h-full object-cover"
               />

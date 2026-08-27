@@ -21,7 +21,7 @@ function ReviewListItem({ review }) {
       <p className="text-muted text-sm mt-1">{review.comment}</p>
       {review.imageUrl && (
         <img
-          src={`https://localhost:7113${review.imageUrl}`}
+          src={`${import.meta.env.VITE_API_URL}${review.imageUrl}`}
           alt=""
           className="w-16 h-16 object-cover rounded-lg mt-3"
         />

@@ -78,7 +78,7 @@ function ReviewsSection({ productId }) {
       >
         {image && (
           <img
-            src={`https://localhost:7113${image}`}
+            src={`${import.meta.env.VITE_API_URL}${image}`}
             alt={review.productName}
             className="w-24 h-24 object-cover rounded-full mx-auto mb-2"
           />
