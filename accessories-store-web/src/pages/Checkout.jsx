@@ -159,6 +159,7 @@ function Checkout() {
       }
 
       clearCart();
+      navigate("/", { replace: true });
       navigate("/order-confirmation", { state: { order: res.data } });
     } catch (err) {
       setError(err.response?.data || "Something went wrong placing your order. Please try again.");
