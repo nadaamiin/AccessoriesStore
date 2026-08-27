@@ -23,7 +23,7 @@ function SortDropdown({ value, onChange }) {
     <div className="relative" ref={ref}>
     <button
       onClick={() => setOpen((v) => !v)}
-      className="w-full flex items-center justify-between px-4 py-3 text-xs font-semibold tracking-wide uppercase text-espresso hover:bg-blush-50 transition"
+      className="w-full flex items-center justify-between px-4 py-3 text-[10px] font-bold tracking-wide uppercase text-espresso hover:bg-blush-50 transition"
     >
       <span>Sort</span>
 

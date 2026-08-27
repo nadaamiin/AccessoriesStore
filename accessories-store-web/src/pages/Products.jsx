@@ -176,12 +176,12 @@ function Products() {
         )}
 
         {/* Filter | Sort bar */}
-        <div className="flex w-full mb-8 border-y border-line bg-white">
+        <div className="flex w-full mb-8 border-y border-line bg-blush-50">
           
           {/* Filter */}
           <button
             onClick={openDrawer}
-            className="flex-1 flex items-center justify-between px-4 py-3 text-xs font-semibold tracking-wide uppercase text-espresso hover:bg-blush-50 transition"
+            className="flex-1 flex items-center justify-between px-4 py-3 text-[10px] font-bold tracking-wide uppercase text-espresso hover:bg-blush-50 transition"
           >
             <div className="flex items-center gap-2">
               <span>Filter</span>
