@@ -1,8 +1,44 @@
 {
   "rewrites": [
     {
-      "source": "/(.*)",
-      "destination": "/index.html"
+      "source": "/login",
+      "destination": "/"
+    },
+    {
+      "source": "/dashboard",
+      "destination": "/"
+    },
+    {
+      "source": "/products",
+      "destination": "/"
+    },
+    {
+      "source": "/orders",
+      "destination": "/"
+    },
+    {
+      "source": "/categories",
+      "destination": "/"
+    },
+    {
+      "source": "/announcement",
+      "destination": "/"
+    },
+    {
+      "source": "/reviews",
+      "destination": "/"
+    },
+    {
+      "source": "/shipping",
+      "destination": "/"
+    },
+    {
+      "source": "/promo-codes",
+      "destination": "/"
+    },
+    {
+      "source": "/messages",
+      "destination": "/"
     }
   ]
 }
