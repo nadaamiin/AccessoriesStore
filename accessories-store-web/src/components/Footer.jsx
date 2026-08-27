@@ -63,7 +63,7 @@ function Footer() {
                 />
               </svg>
 
-              nara@gmail.com
+              naraaccessoriess@gmail.com
             </a>
 
             {/* Instagram */}
