@@ -11,7 +11,7 @@ function OrderSummaryDetails({
         <div key={item.productId} className="flex items-center gap-3">
           <div className="relative shrink-0">
             <img
-              src={`${import.meta.env.VITE_API_URL}${item.imageUrl}`}
+              src={`${import.meta.env.VITE_SERVER_URL}${item.imageUrl}`}
               alt={item.name}
               className="w-14 h-14 object-cover rounded-lg bg-white"
             />
