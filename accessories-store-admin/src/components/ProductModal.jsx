@@ -125,7 +125,7 @@ function ProductModal({ product, categories, onClose, onSave }) {
               {existingImages.map((img) => (
                 <div key={img.id} className="relative w-16 h-16">
                   <img
-                    src={`${import.meta.env.VITE_API_URL}${img.imageUrl}`}
+                    src={`${import.meta.env.VITE_SERVER_URL}${img.imageUrl}`}
                     alt=""
                     className="w-16 h-16 object-cover rounded-md border border-nude-200"
                   />
