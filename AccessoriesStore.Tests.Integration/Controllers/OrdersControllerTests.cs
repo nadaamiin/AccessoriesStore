@@ -41,14 +41,25 @@ public class OrdersControllerTests : ApiTestBase
         var product = await Factory.SeedProductAsync(p => p.IsActive = false);
         var response = await Client.PostAsJsonAsync("/api/orders", GuestOrder(product.Id));
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        (await response.Content.ReadAsStringAsync()).Should().Contain("not available");
     }
 
     [Fact]
-    public async Task CreateOrder_InsufficientStock_ReturnsBadRequest()
+    public async Task CreateOrder_SoldOutProduct_ReturnsBadRequest()
+    {
+        var product = await Factory.SeedProductAsync(p => p.StockQuantity = 0);
+        var response = await Client.PostAsJsonAsync("/api/orders", GuestOrder(product.Id));
+
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        (await response.Content.ReadAsStringAsync()).Should().Contain("Available: 0");
+    }
+
+    [Fact]
+    public async Task CreateOrder_InsufficientStockAcrossDuplicateItems_ReturnsBadRequest()
     {
         var product = await Factory.SeedProductAsync(p => p.StockQuantity = 1);
         var dto = GuestOrder(product.Id);
-        dto.Items[0].Quantity = 2;
+        dto.Items.Add(new CreateOrderItemDto { ProductId = product.Id, Quantity = 1 });
 
         var response = await Client.PostAsJsonAsync("/api/orders", dto);
 

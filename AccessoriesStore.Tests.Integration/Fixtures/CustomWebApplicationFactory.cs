@@ -10,7 +10,9 @@ using AccessoriesStore.Domain.Entities;
 using AccessoriesStore.Tests.Integration.Mocks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -47,7 +49,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
         builder.ConfigureTestServices(services =>
         {
             RemoveDbContext(services);
-            services.AddDbContext<AppDbContext>(options => options.UseSqlite($"Data Source={DbPath}"));
+            services.AddDbContext<AppDbContext>(options => options.UseSqlite($"Data Source={DbPath};Pooling=False"));
             services.RemoveAll<IEmailService>();
             services.AddSingleton(Email);
             services.AddSingleton<IEmailService>(sp => sp.GetRequiredService<MockEmailService>());
@@ -145,7 +147,9 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
             .Where(d =>
                 d.ServiceType == typeof(AppDbContext) ||
                 d.ServiceType == typeof(DbContextOptions<AppDbContext>) ||
-                (d.ServiceType.IsGenericType && d.ServiceType.GetGenericTypeDefinition() == typeof(DbContextOptions<>)))
+                (d.ServiceType.IsGenericType &&
+                    (d.ServiceType.GetGenericTypeDefinition() == typeof(DbContextOptions<>) ||
+                     d.ServiceType.GetGenericTypeDefinition() == typeof(IDbContextOptionsConfiguration<>))))
             .ToList();
 
         foreach (var descriptor in descriptors)

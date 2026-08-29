@@ -36,8 +36,14 @@ public class OrdersController : ControllerBase
             .Where(p => productIds.Contains(p.Id))
             .ToListAsync();
 
+        // Combine duplicate product lines before validating stock and creating order items.
+        var requestedQuantities = dto.Items
+            .GroupBy(i => i.ProductId)
+            .Select(group => new { ProductId = group.Key, Quantity = group.Sum(i => i.Quantity) })
+            .ToList();
+
         // Validate every product exists, is active, and has enough stock
-        foreach (var item in dto.Items)
+        foreach (var item in requestedQuantities)
         {
             var product = products.FirstOrDefault(p => p.Id == item.ProductId);
             if (product == null)
@@ -63,7 +69,7 @@ public class OrdersController : ControllerBase
         };
 
         decimal total = 0;
-        foreach (var item in dto.Items)
+        foreach (var item in requestedQuantities)
         {
             var product = products.First(p => p.Id == item.ProductId);
             var effectivePrice = (product.IsOnSale && product.SalePrice.HasValue) ? product.SalePrice.Value : product.Price;

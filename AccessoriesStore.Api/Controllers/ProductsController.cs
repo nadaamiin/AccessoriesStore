@@ -135,7 +135,7 @@ public class ProductsController : ControllerBase
         var product = await _context.Products
             .Include(p => p.Category)
             .Include(p => p.Images)
-            .FirstOrDefaultAsync(p => p.Id == id);
+            .FirstOrDefaultAsync(p => p.Id == id && p.IsActive);
 
         if (product == null)
             return NotFound();

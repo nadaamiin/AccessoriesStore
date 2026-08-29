@@ -12,7 +12,7 @@ function Marquee() {
   const items = [...block, ...block];
 
   return (
-    <div className="bg-nav py-4 overflow-hidden border-y border-blush-200/60">
+    <div className="bg-nav py-3 overflow-hidden border-y border-blush-200/60">
       <div className="flex w-max animate-marquee">
         {items.map((text, i) => (
           <span key={i} className="flex items-center gap-8 px-8 whitespace-nowrap">

@@ -37,6 +37,16 @@ public class ProductsControllerTests : ApiTestBase
     }
 
     [Fact]
+    public async Task GetProduct_WhenInactive_ReturnsNotFound()
+    {
+        var product = await Factory.SeedProductAsync(p => p.IsActive = false);
+
+        var response = await Client.GetAsync($"/api/products/{product.Id}");
+
+        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+    }
+
+    [Fact]
     public async Task AdminAll_WithoutAuth_ReturnsUnauthorized()
     {
         var response = await Client.GetAsync("/api/products/admin/all");
