@@ -5,7 +5,7 @@ import Layout from "../components/Layout";
 import ProductCard from "../components/ProductCard";
 import Marquee from "../components/Marquee";
 import ReviewsSection from "../components/ReviewsSection";
-import bgImage from "../assets/bg.png";
+import bgImage from "../assets/bg.webp";
 
 function Home() {
   const [products, setProducts] = useState([]);
