@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { getProduct, getProducts } from "../api/products";
+import { getProduct, getRelatedProducts } from "../api/products";
 import { useFavorites } from "../context/FavoritesContext";
 import { useCart } from "../context/CartContext";
 import Layout from "../components/Layout";
@@ -31,10 +31,10 @@ function ProductDetail() {
     getProduct(id)
       .then((res) => {
         setProduct(res.data);
-        return getProducts();
+        return getRelatedProducts(id);
       })
       .then((res) => {
-        setRelated(res.data.filter((p) => String(p.id) !== String(id)).slice(0, 8));
+        setRelated(res.data);
       })
       .catch((err) => console.error("Failed to load product:", err))
       .finally(() => setLoading(false));

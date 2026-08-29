@@ -51,6 +51,83 @@ public class ProductsController : ControllerBase
         return Ok(products);
     }
 
+    // GET: api/products/popular
+    [HttpGet("popular")]
+    public async Task<ActionResult<IEnumerable<ProductDto>>> GetPopularProducts()
+    {
+        var products = await _context.Products
+            .Include(p => p.Category)
+            .Include(p => p.Images)
+            .Where(p => p.IsActive)
+            .OrderByDescending(p => p.OrderItems
+                .Where(oi => oi.Order.Status != OrderStatus.Cancelled)
+                .Sum(oi => (int?)oi.Quantity) ?? 0)
+            .ThenByDescending(p => p.CreatedAt)
+            .Take(8)
+            .Select(p => new ProductDto
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Description = p.Description,
+                Material = p.Material,
+                Dimensions = p.Dimensions,
+                Price = p.Price,
+                SalePrice = p.SalePrice,
+                IsOnSale = p.IsOnSale,
+                StockQuantity = p.StockQuantity,
+                ImageUrl = p.ImageUrl,
+                ImageUrls = p.Images.OrderBy(i => i.DisplayOrder).Select(i => i.Url).ToList(),
+                Images = p.Images.OrderBy(i => i.DisplayOrder).Select(i => new ProductImageDto { Id = i.Id, Url = i.Url }).ToList(),
+                IsActive = p.IsActive,
+                CategoryId = p.CategoryId,
+                CategoryName = p.Category.Name
+            })
+            .ToListAsync();
+
+        return Ok(products);
+    }
+
+    // GET: api/products/5/related
+    [HttpGet("{id}/related")]
+    public async Task<ActionResult<IEnumerable<ProductDto>>> GetRelatedProducts(int id)
+    {
+        var product = await _context.Products.FindAsync(id);
+        if (product == null)
+            return NotFound();
+
+        var products = await _context.Products
+            .Include(p => p.Category)
+            .Include(p => p.Images)
+            .Where(p => p.IsActive && p.Id != id)
+            .OrderByDescending(p => p.CategoryId == product.CategoryId)
+            .ThenByDescending(p => p.OrderItems
+                .Where(oi => oi.Order.Status != OrderStatus.Cancelled)
+                .Sum(oi => (int?)oi.Quantity) ?? 0)
+            .ThenByDescending(p => p.CreatedAt)
+            .Take(8)
+            .Select(p => new ProductDto
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Description = p.Description,
+                Material = p.Material,
+                Dimensions = p.Dimensions,
+                Price = p.Price,
+                SalePrice = p.SalePrice,
+                IsOnSale = p.IsOnSale,
+                StockQuantity = p.StockQuantity,
+                ImageUrl = p.ImageUrl,
+                ImageUrls = p.Images.OrderBy(i => i.DisplayOrder).Select(i => i.Url).ToList(),
+                Images = p.Images.OrderBy(i => i.DisplayOrder).Select(i => new ProductImageDto { Id = i.Id, Url = i.Url }).ToList(),
+                IsActive = p.IsActive,
+                CategoryId = p.CategoryId,
+                CategoryName = p.Category.Name
+            })
+            .ToListAsync();
+
+        return Ok(products);
+    }
+
     // GET: api/products/5
     [HttpGet("{id}")]
     public async Task<ActionResult<ProductDto>> GetProduct(int id)

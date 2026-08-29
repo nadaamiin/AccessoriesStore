@@ -41,7 +41,7 @@ function Dashboard() {
     { label: "Active Products", value: stats.activeProducts },
     { label: "Total Orders", value: stats.totalOrders },
     { label: "Pending Orders", value: stats.pendingOrders },
-    { label: "Total Revenue", value: `EGP ${stats.totalRevenue.toFixed(2)}` },
+    { label: "Total Revenue", value: stats.totalRevenue.toFixed(2), currency: "EGP" },
     { label: "Low Stock (≤5)", value: stats.lowStockCount, warn: stats.lowStockCount > 0 },
   ];
 
@@ -61,7 +61,8 @@ function Dashboard() {
           {cards.map((stat) => (
             <div key={stat.label} className="bg-white border border-nude-200 rounded-lg p-5">
               <p className="text-xs tracking-wide uppercase text-muted mb-2">{stat.label}</p>
-              <p className={`font-display text-2xl ${stat.warn ? "text-brick" : "text-espresso"}`}>
+              <p className={`font-display ${stat.currency ? "text-xl" : "text-2xl"} ${stat.warn ? "text-brick" : "text-espresso"}`}>
+                {stat.currency && <span className="text-xs mr-1">{stat.currency}</span>}
                 {stat.value}
               </p>
             </div>

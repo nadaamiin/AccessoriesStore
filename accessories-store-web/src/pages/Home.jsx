@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { getProducts } from "../api/products";
+import { getPopularProducts } from "../api/products";
 import Layout from "../components/Layout";
 import ProductCard from "../components/ProductCard";
 import Marquee from "../components/Marquee";
@@ -11,7 +11,7 @@ function Home() {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    getProducts().then((res) => setProducts(res.data.slice(0, 8))).catch(() => {});
+    getPopularProducts().then((res) => setProducts(res.data)).catch(() => {});
   }, []);
 
   // Trap back-navigation only if the user just completed an order —
