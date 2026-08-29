@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useUI } from "../context/UIContext";
 import logo from "../assets/logo.png";
-import bgImage from "../assets/bg.png";
+import bgImage from "../assets/bg.webp";
 
 function CheckoutHeader() {
   const { openCart } = useUI();
