@@ -13,7 +13,6 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
@@ -35,17 +34,6 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.UseEnvironment("Testing");
-        builder.ConfigureAppConfiguration((_, config) =>
-        {
-            config.AddInMemoryCollection(new Dictionary<string, string?>
-            {
-                ["Jwt:Key"] = "integration-test-jwt-key-32-chars-min!",
-                ["Jwt:Issuer"] = "AccessoriesStoreApi",
-                ["Jwt:Audience"] = "AccessoriesStoreAdmin",
-                ["Jwt:ExpiryMinutes"] = "120"
-            });
-        });
-
         builder.ConfigureTestServices(services =>
         {
             RemoveDbContext(services);
