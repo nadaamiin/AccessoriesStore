@@ -15,6 +15,7 @@ function ProductModal({ product, categories, onClose, onSave }) {
   });
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+  const [errors, setErrors] = useState({});
 
   // Gallery state
   const [existingImages, setExistingImages] = useState([]); // [{id, url}]
@@ -78,11 +79,25 @@ function ProductModal({ product, categories, onClose, onSave }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    const parsedStock = parseInt(form.stockQuantity, 10);
+    const newErrors = {};
+
+    if (isNaN(parsedStock) || parsedStock < 0) {
+      newErrors.stockQuantity = "Stock can't be negative.";
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    setErrors({});
     onSave(
     {
       ...form,
       price: parseFloat(form.price),
-      stockQuantity: parseInt(form.stockQuantity, 10),
+      stockQuantity: parsedStock,
       categoryId: parseInt(form.categoryId, 10),
       salePrice: form.isOnSale && form.salePrice ? parseFloat(form.salePrice) : null,
     },
@@ -184,11 +199,25 @@ function ProductModal({ product, categories, onClose, onSave }) {
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className={labelClass}>Price</label>
-              <input type="number" step="0.01" name="price" value={form.price} onChange={handleChange} required className={inputClass} />
+              <input type="number" step="0.01" min="0" name="price" value={form.price} onChange={handleChange} required className={inputClass} />
             </div>
             <div>
               <label className={labelClass}>Stock</label>
-              <input type="number" name="stockQuantity" value={form.stockQuantity} onChange={handleChange} required className={inputClass} />
+              <input
+                type="number"
+                min="0"
+                name="stockQuantity"
+                value={form.stockQuantity}
+                onChange={(e) => {
+                  handleChange(e);
+                  if (errors.stockQuantity) setErrors((prev) => ({ ...prev, stockQuantity: undefined }));
+                }}
+                required
+                className={inputClass}
+              />
+              {errors.stockQuantity && (
+                <p className="text-brick text-xs mt-1.5">{errors.stockQuantity}</p>
+              )}
             </div>
           </div>
 
@@ -208,6 +237,7 @@ function ProductModal({ product, categories, onClose, onSave }) {
                 <input
                   type="number"
                   step="0.01"
+                  min="0"
                   value={form.salePrice}
                   onChange={(e) => setForm((prev) => ({ ...prev, salePrice: e.target.value }))}
                   placeholder="Discounted price"

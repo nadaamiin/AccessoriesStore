@@ -20,7 +20,6 @@ export function FavoritesProvider({ children }) {
     localStorage.setItem(KEY, JSON.stringify(favorites));
   }, [favorites]);
 
-  // Reconcile favorites against current product status once on mount
   useEffect(() => {
     const currentFavorites = loadFavorites();
     if (currentFavorites.length === 0) return;
@@ -40,12 +39,12 @@ export function FavoritesProvider({ children }) {
                 removedNames.push(item.name);
                 return null;
               }
-              // keep price/sale info fresh
               return {
                 ...item,
                 price: status.price,
                 salePrice: status.salePrice,
                 isOnSale: status.isOnSale,
+                stockQuantity: status.stockQuantity,
               };
             })
             .filter(Boolean)
@@ -77,6 +76,7 @@ export function FavoritesProvider({ children }) {
               isOnSale: product.isOnSale,
               imageUrl: product.imageUrl,
               imageUrls: product.imageUrls,
+              stockQuantity: product.stockQuantity,
             },
           ]
     );

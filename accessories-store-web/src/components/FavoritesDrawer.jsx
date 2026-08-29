@@ -70,16 +70,25 @@ function FavoritesDrawer() {
                       <p className="text-sm text-espresso font-medium mt-1">LE {item.price.toFixed(2)}</p>
                     )}
                     <div className="flex items-center gap-3 mt-2">
+                      {item.stockQuantity === 0 ? (
                         <button
-                        onClick={() => {
+                          disabled
+                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blush-100 text-muted text-xs font-medium cursor-not-allowed"
+                        >
+                          Sold Out
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => {
                             addItem(item, 1);
                             closeFavorites();
                             openCart();
-                        }}
-                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-espresso text-white text-xs font-medium hover:opacity-90 transition"
+                          }}
+                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-espresso text-white text-xs font-medium hover:opacity-90 transition"
                         >
-                        Add to Cart
+                          Add to Cart
                         </button>
+                      )}
                       <button
                         onClick={() => removeFavorite(item.id)}
                         className="text-muted hover:text-brick transition"
