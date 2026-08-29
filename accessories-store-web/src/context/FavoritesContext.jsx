@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
+import { validateProducts } from "../api/products";
 
 const FavoritesContext = createContext(null);
 const KEY = "favorites";
@@ -13,10 +14,52 @@ function loadFavorites() {
 
 export function FavoritesProvider({ children }) {
   const [favorites, setFavorites] = useState(loadFavorites);
+  const [removedNotice, setRemovedNotice] = useState([]);
 
   useEffect(() => {
     localStorage.setItem(KEY, JSON.stringify(favorites));
   }, [favorites]);
+
+  // Reconcile favorites against current product status once on mount
+  useEffect(() => {
+    const currentFavorites = loadFavorites();
+    if (currentFavorites.length === 0) return;
+
+    const ids = currentFavorites.map((f) => f.id);
+
+    validateProducts(ids)
+      .then((res) => {
+        const statusMap = new Map(res.data.map((p) => [p.id, p]));
+        const removedNames = [];
+
+        setFavorites((prev) =>
+          prev
+            .map((item) => {
+              const status = statusMap.get(item.id);
+              if (!status || !status.isActive) {
+                removedNames.push(item.name);
+                return null;
+              }
+              // keep price/sale info fresh
+              return {
+                ...item,
+                price: status.price,
+                salePrice: status.salePrice,
+                isOnSale: status.isOnSale,
+              };
+            })
+            .filter(Boolean)
+        );
+
+        if (removedNames.length > 0) {
+          setRemovedNotice(removedNames.map((n) => `${n} is no longer available and was removed from your wishlist.`));
+        }
+      })
+      .catch(() => {});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const clearRemovedNotice = () => setRemovedNotice([]);
 
   const isFavorite = (id) => favorites.some((f) => f.id === id);
 
@@ -24,15 +67,18 @@ export function FavoritesProvider({ children }) {
     setFavorites((prev) =>
       prev.some((f) => f.id === product.id)
         ? prev.filter((f) => f.id !== product.id)
-        : [...prev, {
-            id: product.id,
-            name: product.name,
-            price: product.price,
-            salePrice: product.salePrice,
-            isOnSale: product.isOnSale,
-            imageUrl: product.imageUrl,
-            imageUrls: product.imageUrls,
-          }]
+        : [
+            ...prev,
+            {
+              id: product.id,
+              name: product.name,
+              price: product.price,
+              salePrice: product.salePrice,
+              isOnSale: product.isOnSale,
+              imageUrl: product.imageUrl,
+              imageUrls: product.imageUrls,
+            },
+          ]
     );
   };
 
@@ -41,7 +87,9 @@ export function FavoritesProvider({ children }) {
   };
 
   return (
-    <FavoritesContext.Provider value={{ favorites, isFavorite, toggleFavorite, removeFavorite }}>
+    <FavoritesContext.Provider
+      value={{ favorites, isFavorite, toggleFavorite, removeFavorite, removedNotice, clearRemovedNotice }}
+    >
       {children}
     </FavoritesContext.Provider>
   );

@@ -282,4 +282,27 @@ public class ProductsController : ControllerBase
         await _context.SaveChangesAsync();
         return NoContent();
     }
+
+    // POST: api/products/validate
+    [HttpPost("validate")]
+    public async Task<ActionResult<IEnumerable<ProductStatusDto>>> ValidateProducts(ValidateProductsRequest request)
+    {
+        if (request.ProductIds == null || request.ProductIds.Count == 0)
+            return Ok(new List<ProductStatusDto>());
+
+        var products = await _context.Products
+            .Where(p => request.ProductIds.Contains(p.Id))
+            .Select(p => new ProductStatusDto
+            {
+                Id = p.Id,
+                IsActive = p.IsActive,
+                StockQuantity = p.StockQuantity,
+                Price = p.Price,
+                SalePrice = p.SalePrice,
+                IsOnSale = p.IsOnSale
+            })
+            .ToListAsync();
+
+        return Ok(products);
+    }
 }

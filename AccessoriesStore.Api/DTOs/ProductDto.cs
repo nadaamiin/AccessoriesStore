@@ -51,3 +51,18 @@ public class UpdateProductDto
     public bool IsActive { get; set; }
     public int CategoryId { get; set; }
 }
+
+public class ValidateProductsRequest
+{
+    public List<int> ProductIds { get; set; } = new();
+}
+
+public class ProductStatusDto
+{
+    public int Id { get; set; }
+    public bool IsActive { get; set; }
+    public int StockQuantity { get; set; }
+    public decimal Price { get; set; }
+    public decimal? SalePrice { get; set; }
+    public bool IsOnSale { get; set; }
+}

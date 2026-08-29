@@ -247,7 +247,7 @@ function Checkout() {
                     name="governorate"  
                     value={form.governorate}  
                     onChange={handleChange}  
-                    className="w-full bg-white border border-line rounded-lg px-4 py-3 text-espresso focus:outline-none focus:border-rose-300 transition"  
+                    className="w-full bg-white border border-line rounded-lg px-4 py-3 text-espresso focus:outline-none focus:border-espresso transition"  
                   >  
                     {GOVERNORATES.map((g) => (  
                       <option key={g} value={g}>{g}</option>  

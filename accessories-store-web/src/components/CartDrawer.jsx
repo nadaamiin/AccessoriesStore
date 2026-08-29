@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { getShipping } from "../api/shipping";
 
 function CartDrawer() {
-  const { items, updateQuantity, removeItem, totalPrice, totalOriginalPrice } = useCart();
+  const { items, updateQuantity, removeItem, totalPrice, totalOriginalPrice, removedNotice, clearRemovedNotice } = useCart();
   const { cartOpen, closeCart } = useUI();
   const [shipping, setShipping] = useState({ shippingFee: 0, freeShippingThreshold: 0 });
 
@@ -37,6 +37,21 @@ function CartDrawer() {
             </svg>
           </button>
         </div>
+
+        {removedNotice.length > 0 && (
+          <div className="mx-6 mt-4 px-4 py-3 rounded-lg bg-brick/10 border border-brick/20 text-brick text-xs leading-snug flex items-start justify-between gap-2">
+            <div className="space-y-1">
+              {removedNotice.map((msg, i) => (
+                <p key={i}>{msg}</p>
+              ))}
+            </div>
+            <button onClick={clearRemovedNotice} className="shrink-0 hover:opacity-70" aria-label="Dismiss">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M18 6 6 18M6 6l12 12" strokeLinecap="round" />
+              </svg>
+            </button>
+          </div>
+        )}
 
         {/* Free shipping progress */}
         {threshold > 0 && (
