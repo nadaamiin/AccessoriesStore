@@ -21,10 +21,11 @@ function statusStyle(status) {
   return "bg-nude-100 text-muted";
 }
 
-function PromoCodeModal({ code, onClose, onSave }) {
+function PromoCodeModal({ code, onClose, onSave, saving }) {
   const [form, setForm] = useState({
     code: "", ownerName: "", isPercentage: true, discountValue: "", isActive: true, expiresAt: "",
   });
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     if (code) {
@@ -41,6 +42,18 @@ function PromoCodeModal({ code, onClose, onSave }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const newErrors = {};
+
+    if (!form.code.trim()) newErrors.code = "Code is required.";
+    if (form.discountValue === "" || Number.isNaN(Number(form.discountValue))) {
+      newErrors.discountValue = "Discount value is required.";
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
     onSave({
       code: form.code,
       ownerName: form.ownerName,
@@ -62,10 +75,14 @@ function PromoCodeModal({ code, onClose, onSave }) {
           {code ? "Edit Promo Code" : "Add Promo Code"}
         </h2>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form noValidate onSubmit={handleSubmit} className="space-y-5">
           <div>
             <label className={labelClass}>Code</label>
-            <input value={form.code} onChange={(e) => setForm((p) => ({ ...p, code: e.target.value }))} required className={inputClass} />
+            <input value={form.code} onChange={(e) => {
+              setForm((p) => ({ ...p, code: e.target.value }));
+              if (errors.code) setErrors((p) => ({ ...p, code: undefined }));
+            }} required aria-invalid={!!errors.code} className={`${inputClass} ${errors.code ? "border-brick focus:border-brick focus:ring-brick/30" : ""}`} />
+            {errors.code && <p className="text-brick text-xs mt-1.5">{errors.code}</p>}
           </div>
 
           <div>
@@ -87,7 +104,11 @@ function PromoCodeModal({ code, onClose, onSave }) {
             </div>
             <div>
               <label className={labelClass}>Value</label>
-              <input type="number" step="0.01" value={form.discountValue} onChange={(e) => setForm((p) => ({ ...p, discountValue: e.target.value }))} required className={inputClass} />
+              <input type="number" step="0.01" value={form.discountValue} onChange={(e) => {
+                setForm((p) => ({ ...p, discountValue: e.target.value }));
+                if (errors.discountValue) setErrors((p) => ({ ...p, discountValue: undefined }));
+              }} required aria-invalid={!!errors.discountValue} className={`${inputClass} ${errors.discountValue ? "border-brick focus:border-brick focus:ring-brick/30" : ""}`} />
+              {errors.discountValue && <p className="text-brick text-xs mt-1.5">{errors.discountValue}</p>}
             </div>
           </div>
 
@@ -102,11 +123,11 @@ function PromoCodeModal({ code, onClose, onSave }) {
           </label>
 
           <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-2 pt-2">
-            <button type="button" onClick={onClose} className="px-4 py-2.5 rounded-md border border-nude-200 text-espresso hover:bg-nude-100 transition text-sm font-medium">
+            <button type="button" onClick={onClose} disabled={saving} className="px-4 py-2.5 rounded-md border border-nude-200 text-espresso hover:bg-nude-100 transition text-sm font-medium disabled:opacity-50">
               Cancel
             </button>
-            <button type="submit" className="px-4 py-2.5 rounded-md bg-[#8e625a] text-nude-50 hover:bg-nude-600 transition text-sm font-medium">
-              Save
+            <button type="submit" disabled={saving} className="px-4 py-2.5 rounded-md bg-[#8e625a] text-nude-50 hover:bg-nude-600 transition text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed">
+              {saving ? "Saving..." : "Save"}
             </button>
           </div>
         </form>
@@ -203,6 +224,7 @@ function PromoCodes() {
   const [modalOpen, setModalOpen] = useState(false);
   const [editingCode, setEditingCode] = useState(null);
   const [deleteTarget, setDeleteTarget] = useState(null);
+  const [saving, setSaving] = useState(false);
   const [tab, setTab] = useState("active"); // active | expired | all
 
   const load = async () => {
@@ -240,6 +262,7 @@ function PromoCodes() {
   };
 
   const handleSave = async (payload) => {
+    setSaving(true);
     try {
       if (editingCode) {
         await updatePromoCode(editingCode.id, payload);
@@ -250,6 +273,8 @@ function PromoCodes() {
       load();
     } catch {
       alert("Failed to save promo code.");
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -331,7 +356,7 @@ function PromoCodes() {
     <AppShell search={<SearchBar value={query} onChange={setQuery} placeholder="Search by code or owner…" />}>
       {content}
       {modalOpen && (
-        <PromoCodeModal code={editingCode} onClose={() => setModalOpen(false)} onSave={handleSave} />
+        <PromoCodeModal code={editingCode} onClose={() => setModalOpen(false)} onSave={handleSave} saving={saving} />
       )}
       <ConfirmDialog
         open={!!deleteTarget}

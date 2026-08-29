@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 
-function CategoryModal({ category, onClose, onSave }) {
+function CategoryModal({ category, onClose, onSave, saving }) {
   const [form, setForm] = useState({ name: "", description: "" });
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     if (category) {
@@ -12,10 +13,16 @@ function CategoryModal({ category, onClose, onSave }) {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
+    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: undefined }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!form.name.trim()) {
+      setErrors({ name: "Name is required." });
+      return;
+    }
+
     onSave(form);
   };
 
@@ -30,10 +37,11 @@ function CategoryModal({ category, onClose, onSave }) {
           {category ? "Edit Category" : "Add Category"}
         </h2>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form noValidate onSubmit={handleSubmit} className="space-y-5">
           <div>
             <label className={labelClass}>Name</label>
-            <input name="name" value={form.name} onChange={handleChange} required className={inputClass} />
+            <input name="name" value={form.name} onChange={handleChange} required aria-invalid={!!errors.name} className={`${inputClass} ${errors.name ? "border-brick focus:border-brick focus:ring-brick/30" : ""}`} />
+            {errors.name && <p className="text-brick text-xs mt-1.5">{errors.name}</p>}
           </div>
 
           <div>
@@ -42,11 +50,11 @@ function CategoryModal({ category, onClose, onSave }) {
           </div>
 
           <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-2 pt-2">
-            <button type="button" onClick={onClose} className="px-4 py-2.5 rounded-md border border-nude-200 text-espresso hover:bg-nude-100 transition text-sm font-medium">
+            <button type="button" onClick={onClose} disabled={saving} className="px-4 py-2.5 rounded-md border border-nude-200 text-espresso hover:bg-nude-100 transition text-sm font-medium disabled:opacity-50">
               Cancel
             </button>
-            <button type="submit" className="px-4 py-2.5 rounded-md bg-[#8e625a] text-nude-50 hover:bg-nude-600 transition text-sm font-medium">
-              Save
+            <button type="submit" disabled={saving} className="px-4 py-2.5 rounded-md bg-[#8e625a] text-nude-50 hover:bg-nude-600 transition text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed">
+              {saving ? "Saving..." : "Save"}
             </button>
           </div>
         </form>

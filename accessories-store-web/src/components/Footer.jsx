@@ -44,7 +44,7 @@ function Footer() {
 
             {/* Email */}
             <a
-              href="mailto:nara@gmail.com"
+              href="mailto:naraaccessoriess@gmail.com"
               className="flex items-center gap-2 hover:underline w-fit"
             >
               <svg

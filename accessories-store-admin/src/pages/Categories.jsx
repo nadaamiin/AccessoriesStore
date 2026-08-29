@@ -13,6 +13,7 @@ function Categories() {
   const [editingCategory, setEditingCategory] = useState(null);
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [deleteError, setDeleteError] = useState("");
+  const [saving, setSaving] = useState(false);
 
   const loadData = async () => {
     setLoading(true);
@@ -56,6 +57,7 @@ function Categories() {
   };
 
   const handleSave = async (formData) => {
+    setSaving(true);
     try {
       if (editingCategory) {
         await updateCategory(editingCategory.id, formData);
@@ -66,6 +68,8 @@ function Categories() {
       loadData();
     } catch (err) {
       alert("Failed to save category.");
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -154,6 +158,7 @@ function Categories() {
           category={editingCategory}
           onClose={() => setModalOpen(false)}
           onSave={handleSave}
+          saving={saving}
         />
       )}
     </div>

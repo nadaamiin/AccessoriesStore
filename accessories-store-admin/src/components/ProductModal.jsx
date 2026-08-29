@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-function ProductModal({ product, categories, onClose, onSave }) {
+function ProductModal({ product, categories, onClose, onSave, saving }) {
   const [form, setForm] = useState({
   name: "",
   description: "",
@@ -49,6 +49,7 @@ function ProductModal({ product, categories, onClose, onSave }) {
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setForm((prev) => ({ ...prev, [name]: type === "checkbox" ? checked : value }));
+    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: undefined }));
   };
 
   const handleImageChange = (e) => {
@@ -82,6 +83,19 @@ function ProductModal({ product, categories, onClose, onSave }) {
 
     const parsedStock = parseInt(form.stockQuantity, 10);
     const newErrors = {};
+
+    if (!form.name.trim()) newErrors.name = "Name is required.";
+    if (form.price === "" || Number.isNaN(Number(form.price))) {
+      newErrors.price = "Price is required.";
+    } else if (Number(form.price) < 0) {
+      newErrors.price = "Price can't be negative.";
+    }
+    if (!form.categoryId) newErrors.categoryId = "Category is required.";
+    if (form.isOnSale && (form.salePrice === "" || Number.isNaN(Number(form.salePrice)))) {
+      newErrors.salePrice = "Sale price is required when the product is on sale.";
+    } else if (form.isOnSale && Number(form.salePrice) < 0) {
+      newErrors.salePrice = "Sale price can't be negative.";
+    }
 
     if (isNaN(parsedStock) || parsedStock < 0) {
       newErrors.stockQuantity = "Stock can't be negative.";
@@ -118,7 +132,7 @@ function ProductModal({ product, categories, onClose, onSave }) {
           {product ? "Edit Product" : "Add Product"}
         </h2>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form noValidate onSubmit={handleSubmit} className="space-y-5">
           <div>
             <label className={labelClass}>Primary Image</label>
             <div className="flex items-center gap-4">
@@ -178,7 +192,8 @@ function ProductModal({ product, categories, onClose, onSave }) {
 
           <div>
             <label className={labelClass}>Name</label>
-            <input name="name" value={form.name} onChange={handleChange} required className={inputClass} />
+            <input name="name" value={form.name} onChange={handleChange} required aria-invalid={!!errors.name} className={`${inputClass} ${errors.name ? "border-brick focus:border-brick focus:ring-brick/30" : ""}`} />
+            {errors.name && <p className="text-brick text-xs mt-1.5">{errors.name}</p>}
           </div>
 
           <div>
@@ -199,7 +214,8 @@ function ProductModal({ product, categories, onClose, onSave }) {
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className={labelClass}>Price</label>
-              <input type="number" step="0.01" min="0" name="price" value={form.price} onChange={handleChange} required className={inputClass} />
+               <input type="number" step="0.01" min="0" name="price" value={form.price} onChange={handleChange} required aria-invalid={!!errors.price} className={`${inputClass} ${errors.price ? "border-brick focus:border-brick focus:ring-brick/30" : ""}`} />
+               {errors.price && <p className="text-brick text-xs mt-1.5">{errors.price}</p>}
             </div>
             <div>
               <label className={labelClass}>Stock</label>
@@ -213,7 +229,8 @@ function ProductModal({ product, categories, onClose, onSave }) {
                   if (errors.stockQuantity) setErrors((prev) => ({ ...prev, stockQuantity: undefined }));
                 }}
                 required
-                className={inputClass}
+                aria-invalid={!!errors.stockQuantity}
+                className={`${inputClass} ${errors.stockQuantity ? "border-brick focus:border-brick focus:ring-brick/30" : ""}`}
               />
               {errors.stockQuantity && (
                 <p className="text-brick text-xs mt-1.5">{errors.stockQuantity}</p>
@@ -239,11 +256,16 @@ function ProductModal({ product, categories, onClose, onSave }) {
                   step="0.01"
                   min="0"
                   value={form.salePrice}
-                  onChange={(e) => setForm((prev) => ({ ...prev, salePrice: e.target.value }))}
+                  onChange={(e) => {
+                    setForm((prev) => ({ ...prev, salePrice: e.target.value }));
+                    if (errors.salePrice) setErrors((prev) => ({ ...prev, salePrice: undefined }));
+                  }}
                   placeholder="Discounted price"
                   required={form.isOnSale}
-                  className={inputClass}
+                  aria-invalid={!!errors.salePrice}
+                  className={`${inputClass} ${errors.salePrice ? "border-brick focus:border-brick focus:ring-brick/30" : ""}`}
                 />
+                {errors.salePrice && <p className="text-brick text-xs mt-1.5">{errors.salePrice}</p>}
               </div>
             )}
           </div>
@@ -252,12 +274,13 @@ function ProductModal({ product, categories, onClose, onSave }) {
 
           <div>
             <label className={labelClass}>Category</label>
-            <select name="categoryId" value={form.categoryId} onChange={handleChange} required className={inputClass}>
+            <select name="categoryId" value={form.categoryId} onChange={handleChange} required aria-invalid={!!errors.categoryId} className={`${inputClass} ${errors.categoryId ? "border-brick focus:border-brick focus:ring-brick/30" : ""}`}>
               <option value="">Select a category</option>
               {categories.map((cat) => (
                 <option key={cat.id} value={cat.id}>{cat.name}</option>
               ))}
             </select>
+            {errors.categoryId && <p className="text-brick text-xs mt-1.5">{errors.categoryId}</p>}
           </div>
 
           {product && (
@@ -268,11 +291,11 @@ function ProductModal({ product, categories, onClose, onSave }) {
           )}
 
           <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-2 pt-2">
-            <button type="button" onClick={onClose} className="px-4 py-2.5 rounded-md border border-nude-200 text-espresso hover:bg-nude-100 transition text-sm font-medium">
+            <button type="button" onClick={onClose} disabled={saving} className="px-4 py-2.5 rounded-md border border-nude-200 text-espresso hover:bg-nude-100 transition text-sm font-medium disabled:opacity-50">
               Cancel
             </button>
-            <button type="submit" className="px-4 py-2.5 rounded-md bg-[#8e625a] text-nude-50 hover:bg-nude-600 transition text-sm font-medium">
-              Save
+            <button type="submit" disabled={saving} className="px-4 py-2.5 rounded-md bg-[#8e625a] text-nude-50 hover:bg-nude-600 transition text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed">
+              {saving ? "Saving..." : "Save"}
             </button>
           </div>
         </form>

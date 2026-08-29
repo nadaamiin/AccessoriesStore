@@ -22,6 +22,7 @@ function Products() {
   const [editingProduct, setEditingProduct] = useState(null);
   const [query, setQuery] = useState("");
   const [deleteTarget, setDeleteTarget] = useState(null);
+  const [saving, setSaving] = useState(false);
 
   const loadData = async () => {
     setLoading(true);
@@ -68,6 +69,7 @@ function Products() {
   };
 
   const handleSave = async (formData, imageFile, galleryFiles, removedImageIds) => {
+    setSaving(true);
     try {
       let productId;
       if (editingProduct) {
@@ -94,6 +96,8 @@ function Products() {
       loadData();
     } catch (err) {
       alert("Failed to save product.");
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -263,6 +267,7 @@ function Products() {
           categories={categories}
           onClose={() => setModalOpen(false)}
           onSave={handleSave}
+          saving={saving}
         />
       )}
     </div>

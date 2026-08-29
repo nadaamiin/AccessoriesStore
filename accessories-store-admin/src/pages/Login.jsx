@@ -8,12 +8,21 @@ function Login() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const errors = {};
+    if (!email.trim()) errors.email = "Email is required.";
+    if (!password) errors.password = "Password is required.";
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      return;
+    }
 
     setError("");
     setLoading(true);
@@ -96,7 +105,7 @@ function Login() {
           )}
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form noValidate onSubmit={handleSubmit} className="space-y-6">
             
             {/* Email */}
             <div>
@@ -106,10 +115,14 @@ function Login() {
               <input
                 type="email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  if (fieldErrors.email) setFieldErrors((prev) => ({ ...prev, email: undefined }));
+                }}
                 placeholder="Enter your email"
                 required
-                className="
+                aria-invalid={!!fieldErrors.email}
+                className={`
                   w-full
                   rounded-lg
                   border border-nude-300
@@ -122,8 +135,10 @@ function Login() {
                   focus:border-nude-500
                   focus:ring-2
                   focus:ring-nude-300/50
-                "
+                  ${fieldErrors.email ? "border-brick focus:border-brick focus:ring-brick/30" : ""}
+                `}
               />
+              {fieldErrors.email && <p className="text-brick text-xs mt-1.5">{fieldErrors.email}</p>}
             </div>
 
             {/* Password */}
@@ -135,10 +150,14 @@ function Login() {
                 <input
                   type={showPassword ? "text" : "password"}
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    if (fieldErrors.password) setFieldErrors((prev) => ({ ...prev, password: undefined }));
+                  }}
                   placeholder="Enter your password"
                   required
-                  className="
+                  aria-invalid={!!fieldErrors.password}
+                  className={`
                     w-full
                     rounded-lg
                     border border-nude-300
@@ -152,7 +171,8 @@ function Login() {
                     focus:border-nude-500
                     focus:ring-2
                     focus:ring-nude-300/50
-                  "
+                    ${fieldErrors.password ? "border-brick focus:border-brick focus:ring-brick/30" : ""}
+                  `}
                 />
                 <button
                   type="button"
@@ -172,6 +192,7 @@ function Login() {
                   )}
                 </button>
               </div>
+              {fieldErrors.password && <p className="text-brick text-xs mt-1.5">{fieldErrors.password}</p>}
             </div>
 
             {/* Button */}
